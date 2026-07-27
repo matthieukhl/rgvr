@@ -29,13 +29,10 @@ import (
 // statusCmd represents the status command
 var statusCmd = &cobra.Command{
 	Use:   "status",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+	Short: "Check the status of your Ringover API key",
+	Long: `Checks the status of your Ringover API key by making
+a test request to the API. If the API key is valid, it will return a success message.`,
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		client, err := internal.NewClient()
 		if err != nil {
