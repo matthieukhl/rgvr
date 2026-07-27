@@ -16,10 +16,9 @@
 	    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package main
+package internal
 
-import "github.com/matthieukhl/rgvr/cmd"
-
-func main() {
-	cmd.Execute()
-}
+const (
+	EUBaseURL = "https://public-api.ringover.com/v2"
+	USBaseURL = "https://public-api-us.ringover.com/v2"
+)
