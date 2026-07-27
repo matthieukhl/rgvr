@@ -30,8 +30,9 @@ import (
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "rgvr",
-	Short: "A CLI to interact with Ringover's public API.",
+	Use:     "rgvr",
+	Version: appVersion,
+	Short:   "A CLI to interact with Ringover's public API.",
 	Long: `A CLI to interact with Ringover's public API.
 It allows you to manage your Ringover account directly from the command line.`,
 }
