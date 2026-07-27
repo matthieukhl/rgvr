@@ -20,35 +20,58 @@ package cmd
 
 import (
 	"fmt"
+	"os"
+	"path/filepath"
+	"strings"
 
+	"github.com/matthieukhl/rgvr/internal"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
+	"golang.org/x/term"
 )
 
 // loginCmd represents the login command
 var loginCmd = &cobra.Command{
 	Use:   "login",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+	Short: "Save your Ringover API key locally",
+	Long: `Prompts for your Ringover API key and stores it in
+~/.config/rgvr/config.yaml so you don't need to pass it on every command.`,
+	RunE: func(cmd *cobra.Command, args []string) error {
+		fmt.Print("Please enter your Ringover API key: ")
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
-	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("login called")
+		byteKey, err := term.ReadPassword(int(os.Stdin.Fd()))
+		fmt.Println()
+		if err != nil {
+			return fmt.Errorf("reading API key: %w", err)
+		}
+
+		apiKey := strings.TrimSpace(string(byteKey))
+		if apiKey == "" {
+			return fmt.Errorf("API key cannot be empty")
+		}
+
+		configDir, err := internal.GetConfigDir()
+		configPath := filepath.Join(configDir, "config.yaml")
+
+		if err := os.MkdirAll(configDir, 0700); err != nil {
+			return fmt.Errorf("creating config directory: %w", err)
+		}
+
+		viper.Set("api_key", apiKey)
+
+		if err := viper.WriteConfigAs(configPath); err != nil {
+			return fmt.Errorf("writing config file: %w", err)
+		}
+
+		if err := os.Chmod(configPath, 0600); err != nil {
+			return fmt.Errorf("setting config file permissions: %w", err)
+		}
+
+		fmt.Printf("API key saved to %s\n", configPath)
+		return nil
 	},
 }
 
 func init() {
 	authCmd.AddCommand(loginCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// loginCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// loginCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
