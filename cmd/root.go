@@ -19,9 +19,13 @@
 package cmd
 
 import (
+	"errors"
+	"fmt"
 	"os"
 
+	"github.com/matthieukhl/rgvr/internal"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 // rootCmd represents the base command when called without any subcommands
@@ -49,13 +53,34 @@ func Execute() {
 }
 
 func init() {
-	// Here you will define your flags and configuration settings.
-	// Cobra supports persistent flags, which, if defined here,
-	// will be global for your application.
+	cobra.OnInitialize(initConfig)
+	rootCmd.PersistentFlags().String("api-key", "", "Your Ringover API key set by using the `rgvr auth login` command")
+}
 
-	// rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.rgvr.yaml)")
+func initConfig() {
+	viper.SetEnvPrefix("RGVR")
+	viper.AutomaticEnv()
+	viper.SetConfigName("config")
+	viper.SetConfigType("yaml")
 
-	// Cobra also supports local flags, which will only run
-	// when this action is called directly.
-	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	configDir, err := internal.GetConfigDir()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error getting config directory: %v\n", err)
+		os.Exit(1)
+	}
+
+	viper.AddConfigPath(configDir)
+
+	if err := viper.ReadInConfig(); err != nil {
+		var notFoundErr viper.ConfigFileNotFoundError
+		if !errors.As(err, &notFoundErr) {
+			fmt.Fprintf(os.Stderr, "Error reading config file: %v\n", err)
+			os.Exit(1)
+		}
+	}
+
+	if err := viper.BindPFlag("api_key", rootCmd.PersistentFlags().Lookup("api-key")); err != nil {
+		fmt.Fprintf(os.Stderr, "Error binding API key flag: %v\n", err)
+		os.Exit(1)
+	}
 }
