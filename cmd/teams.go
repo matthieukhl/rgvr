@@ -15,15 +15,19 @@
 	    You should have received a copy of the GNU Affero General Public License
 	    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+
 package cmd
 
 import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"os"
 
 	"github.com/matthieukhl/rgvr/internal"
 	"github.com/matthieukhl/rgvr/internal/models"
+	"github.com/olekukonko/tablewriter"
+	"github.com/olekukonko/tablewriter/tw"
 	"github.com/spf13/cobra"
 )
 
@@ -57,14 +61,31 @@ var teamsCmd = &cobra.Command{
 			return fmt.Errorf("decoding team information: %w", err)
 		}
 
-		fmt.Printf("Team ID: %d\n", team.TeamID)
-		fmt.Printf("Name: %s\n", team.Name)
-		fmt.Printf("Total Numbers Count: %d\n", team.TotalNumbersCount)
-		fmt.Printf("Total Users Count: %d\n", team.TotalUsersCount)
-		fmt.Printf("Total Conferences Count: %d\n", team.TotalConferencesCount)
-		fmt.Printf("Total IVRs Count: %d\n", team.TotalIvrsCount)
-		fmt.Printf("Total Tags Count: %d\n", team.TotalTagsCount)
-		fmt.Printf("Total Groups Count: %d\n", team.TotalGroupsCount)
+		table := tablewriter.NewTable(os.Stdout, tablewriter.WithHeaderAutoFormat(tw.Off))
+
+		table.Header([]string{
+			"Team ID",
+			"Name",
+			"Total Numbers Count",
+			"Total Users Count",
+			"Total Conferences Count",
+			"Total IVRs Count",
+			"Total Tags Count",
+			"Total Groups Count",
+		})
+
+		table.Append([]string{
+			fmt.Sprintf("%d", team.TeamID),
+			team.Name,
+			fmt.Sprintf("%d", team.TotalNumbersCount),
+			fmt.Sprintf("%d", team.TotalUsersCount),
+			fmt.Sprintf("%d", team.TotalConferencesCount),
+			fmt.Sprintf("%d", team.TotalIvrsCount),
+			fmt.Sprintf("%d", team.TotalTagsCount),
+			fmt.Sprintf("%d", team.TotalGroupsCount),
+		})
+
+		table.Render()
 
 		return nil
 
