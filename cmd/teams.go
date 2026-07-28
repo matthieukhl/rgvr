@@ -62,6 +62,7 @@ var teamsCmd = &cobra.Command{
 		fmt.Printf("Total Numbers Count: %d\n", team.TotalNumbersCount)
 		fmt.Printf("Total Users Count: %d\n", team.TotalUsersCount)
 		fmt.Printf("Total Conferences Count: %d\n", team.TotalConferencesCount)
+		fmt.Printf("Total IVRs Count: %d\n", team.TotalIvrsCount)
 		fmt.Printf("Total Tags Count: %d\n", team.TotalTagsCount)
 		fmt.Printf("Total Groups Count: %d\n", team.TotalGroupsCount)
 
