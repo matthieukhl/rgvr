@@ -19,8 +19,6 @@
 package cmd
 
 import (
-	"fmt"
-
 	"github.com/spf13/cobra"
 )
 
@@ -29,9 +27,6 @@ var authCmd = &cobra.Command{
 	Use:   "auth",
 	Short: "Login, logout, and manage your Ringover API key",
 	Long:  `The auth command allows you to log in, log out, and manage your Ringover API key.`,
-	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("auth called")
-	},
 }
 
 func init() {
