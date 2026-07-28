@@ -71,6 +71,10 @@ Build the binary:
 make build
 ```
 
+## Changelog
+
+See [Changelog](CHANGELOG.md).
+
 ## Links
 
 - [Ringover API documentation](https://developer.ringover.com)
