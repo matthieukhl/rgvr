@@ -18,7 +18,13 @@
 
 package models
 
+import (
+	"fmt"
+	"strings"
+)
+
 // User represents a user in the Ringover system.
+// It implements the Tabler interface.
 type User struct {
 	UserID     int      `json:"user_id"`
 	TeamID     int      `json:"team_id"`
@@ -31,4 +37,47 @@ type User struct {
 	Picture    string   `json:"picture"`
 	ConcatName string   `json:"concat_name"`
 	Numbers    []Number `json:"numbers"`
+}
+
+func (u User) TableHeader() []string {
+	return []string{
+		"UserID",
+		"TeamID",
+		"Initial",
+		"Color",
+		"Firstname",
+		"Lastname",
+		"Company",
+		"Email",
+		"Picture",
+		"ConcatName",
+		"Numbers",
+	}
+}
+
+func (u User) TableRow() []string {
+	return []string{
+		fmt.Sprintf("%d", u.UserID),
+		fmt.Sprintf("%d", u.TeamID),
+		u.Initial,
+		u.Color,
+		u.Firstname,
+		u.Lastname,
+		u.Company,
+		u.Email,
+		u.Picture,
+		u.ConcatName,
+		listNumbers(u.Numbers),
+	}
+}
+
+// Helper function to list numbers for into a comma-separated string.
+func listNumbers(numbers []Number) string {
+	var numbersList []string
+
+	for _, number := range numbers {
+		numbersList = append(numbersList, fmt.Sprintf("%d", number.Number))
+	}
+
+	return strings.Join(numbersList, ", ")
 }

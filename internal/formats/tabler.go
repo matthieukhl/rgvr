@@ -1,0 +1,50 @@
+/*
+		rgvr - A CLI to interact with Ringover's public API.
+	    Copyright (C) 2026  Matthieu Khairallah
+
+	    This program is free software: you can redistribute it and/or modify
+	    it under the terms of the GNU Affero General Public License as published by
+	    the Free Software Foundation, either version 3 of the License, or
+	    (at your option) any later version.
+
+	    This program is distributed in the hope that it will be useful,
+	    but WITHOUT ANY WARRANTY; without even the implied warranty of
+	    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	    GNU Affero General Public License for more details.
+
+	    You should have received a copy of the GNU Affero General Public License
+	    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
+package formats
+
+import (
+	"io"
+
+	"github.com/olekukonko/tablewriter"
+	"github.com/olekukonko/tablewriter/tw"
+)
+
+type Tabler interface {
+	TableHeader() []string
+	TableRow() []string
+}
+
+// Table function renders API output in table format
+// leveraging Tabler interface.
+func Table[T Tabler](w io.Writer, items []T) error {
+	if len(items) == 0 {
+		return nil
+	}
+
+	table := tablewriter.NewTable(w, tablewriter.WithHeaderAutoFormat(tw.Off))
+	table.Header(items[0].TableHeader())
+
+	for _, item := range items {
+		table.Append(item.TableRow())
+	}
+
+	table.Render()
+
+	return nil
+}

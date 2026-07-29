@@ -25,6 +25,7 @@ import (
 	"time"
 
 	"github.com/matthieukhl/rgvr/internal"
+	"github.com/matthieukhl/rgvr/internal/formats"
 	"github.com/matthieukhl/rgvr/internal/models"
 	"github.com/spf13/cobra"
 )
@@ -59,41 +60,21 @@ The total number of users is indicated in the list_count field.`,
 			return err
 		}
 
-		// table := tablewriter.NewTable(os.Stdout, tablewriter.WithHeaderAutoFormat(tw.Off))
-		// table.Header([]string{
-		// 	"ID",
-		// 	"First Name",
-		// 	"Last Name",
-		// 	"Email",
-		// 	"Company",
-		// 	"Picture",
-		// 	"Numbers",
-		// })
-
-		// var numbers []int64
-
-		// for _, user := range usersResponse.List {
-		// 	for _, number := range user.Numbers {
-		// 		numbers = append(numbers, number.Number)
-		// 	}
-		// }
-
-		// for _, user := range usersResponse.List {
-		// 	table.Append([]string{
-		// 		fmt.Sprintf("%d", user.UserID),
-		// 		user.Firstname,
-		// 		user.Lastname,
-		// 		user.Email,
-		// 		user.Company,
-		// 		user.Picture,
-		// 		fmt.Sprintf("%v\n", numbers),
-		// 	})
-		// }
-
-		// table.Render()
-
-		if err := json.NewEncoder(os.Stdout).Encode(usersResponse); err != nil {
+		format, err := cmd.Flags().GetString("format")
+		if err != nil {
 			return err
+		}
+
+		if err = formats.Check(format); err != nil {
+			return err
+		}
+
+		// Output result to stdout
+		switch format {
+		case "table":
+			formats.Table(os.Stdout, usersResponse.List)
+		default:
+			formats.JSON(os.Stdout, usersResponse)
 		}
 
 		verbose, err := cmd.Flags().GetBool("verbose")
@@ -109,4 +90,5 @@ The total number of users is indicated in the list_count field.`,
 func init() {
 	usersCmd.AddCommand(listCmd)
 	listCmd.Flags().BoolP("verbose", "v", false, "Display detailed information about each user")
+	listCmd.Flags().String("format", "json", "Choose the output's format: table / json")
 }
