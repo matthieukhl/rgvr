@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added `users list` command that retrieves the list of users from the `/users` endpoint.
 - Added `--format` flag to `users list` command to choose between different output formats (table, json).
 
+### Modified
+
+- `teams` command now supports `--format` flag to chosse between different output formats (table, json).
+
 ### Removed
 
 - Run function for `auth` command.

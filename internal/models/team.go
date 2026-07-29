@@ -18,9 +18,13 @@
 
 package models
 
-import "time"
+import (
+	"fmt"
+	"time"
+)
 
 // Team represents a team in the Ringover system, including its associated numbers, users, IVRs, conferences, tags, and groups.
+// It implements the Table interface.
 type Team struct {
 	TeamID            int      `json:"team_id"`
 	Name              string   `json:"name"`
@@ -66,4 +70,30 @@ type Team struct {
 		Color           string `json:"color"`
 		IsJumper        bool   `json:"is_jumper"`
 	} `json:"groups"`
+}
+
+func (t Team) TableHeader() []string {
+	return []string{
+		"TeamID",
+		"Name",
+		"TotalNumbersCount",
+		"TotalUsersCount",
+		"TotalIvrsCount",
+		"TotalConferencesCount",
+		"TotalTagsCount",
+		"TotalGroupsCount",
+	}
+}
+
+func (t Team) TableRow() []string {
+	return []string{
+		fmt.Sprintf("%d", t.TeamID),
+		t.Name,
+		fmt.Sprintf("%d", t.TotalNumbersCount),
+		fmt.Sprintf("%d", t.TotalUsersCount),
+		fmt.Sprintf("%d", t.TotalIvrsCount),
+		fmt.Sprintf("%d", t.TotalConferencesCount),
+		fmt.Sprintf("%d", t.TotalTagsCount),
+		fmt.Sprintf("%d", t.TotalGroupsCount),
+	}
 }

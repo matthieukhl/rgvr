@@ -26,9 +26,8 @@ import (
 
 	"github.com/matthieukhl/rgvr/cmd"
 	"github.com/matthieukhl/rgvr/internal"
+	"github.com/matthieukhl/rgvr/internal/formats"
 	"github.com/matthieukhl/rgvr/internal/models"
-	"github.com/olekukonko/tablewriter"
-	"github.com/olekukonko/tablewriter/tw"
 	"github.com/spf13/cobra"
 )
 
@@ -62,48 +61,38 @@ var TeamsCmd = &cobra.Command{
 			return fmt.Errorf("decoding team information: %w", err)
 		}
 
-		table := tablewriter.NewTable(os.Stdout, tablewriter.WithHeaderAutoFormat(tw.Off))
+		// This is ugly but necessary to be able to pass the `team` object
+		// to formats.Table() func below
+		var teamList = []models.Team{team}
 
-		table.Header([]string{
-			"Team ID",
-			"Name",
-			"Total Numbers Count",
-			"Total Users Count",
-			"Total Conferences Count",
-			"Total IVRs Count",
-			"Total Tags Count",
-			"Total Groups Count",
-		})
+		format, err := cd.Flags().GetString("format")
+		if err != nil {
+			return err
+		}
 
-		table.Append([]string{
-			fmt.Sprintf("%d", team.TeamID),
-			team.Name,
-			fmt.Sprintf("%d", team.TotalNumbersCount),
-			fmt.Sprintf("%d", team.TotalUsersCount),
-			fmt.Sprintf("%d", team.TotalConferencesCount),
-			fmt.Sprintf("%d", team.TotalIvrsCount),
-			fmt.Sprintf("%d", team.TotalTagsCount),
-			fmt.Sprintf("%d", team.TotalGroupsCount),
-		})
+		if err = formats.Check(format); err != nil {
+			return err
+		}
 
-		table.Render()
+		// Output result to stdout
+		switch format {
+		case "table":
+			if err := formats.Table(os.Stdout, teamList); err != nil {
+				return err
+			}
+		default:
+			if err := formats.JSON(os.Stdout, team); err != nil {
+				return err
+			}
+		}
 
 		return nil
 
 	},
 }
 
-
 func init() {
 	cmd.RootCmd.AddCommand(TeamsCmd)
-	
-	// Here you will define your flags and configuration settings.
 
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// TeamsCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// TeamsCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	TeamsCmd.Flags().String("format", "json", "Choose the output's format: table / json")
 }
