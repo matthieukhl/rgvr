@@ -24,9 +24,8 @@ import (
 	"os"
 
 	"github.com/matthieukhl/rgvr/internal"
+	"github.com/matthieukhl/rgvr/internal/formats"
 	"github.com/matthieukhl/rgvr/internal/models"
-	"github.com/olekukonko/tablewriter"
-	"github.com/olekukonko/tablewriter/tw"
 	"github.com/spf13/cobra"
 )
 
@@ -52,28 +51,30 @@ of licences for each plan.`,
 			return fmt.Errorf("unexpected response from API: %s", resp.Status)
 		}
 
-		var planData models.PlanDataRaw
+		var planData []models.PlanData
 		if err := json.NewDecoder(resp.Body).Decode(&planData); err != nil {
 			return fmt.Errorf("decoding plan data: %w", err)
 		}
 
-		table := tablewriter.NewTable(os.Stdout, tablewriter.WithHeaderAutoFormat(tw.Off))
-		table.Header([]string{
-			"Plan ID",
-			"Plan Name",
-			"Number of Licences Used",
-			"Total Number of Licences",
-		})
-
-		for _, plan := range planData {
-			table.Append([]string{
-				fmt.Sprintf("%d", plan.PlanID),
-				plan.PlanName,
-				fmt.Sprintf("%d", plan.NbLicencesUsed),
-				fmt.Sprintf("%d", plan.NbLicences),
-			})
+		format, err := cd.Flags().GetString("format")
+		if err != nil {
+			return err
 		}
-		table.Render()
+
+		if err := formats.Check(format); err != nil {
+			return err
+		}
+
+		switch format {
+		case "table":
+			if err := formats.Table(os.Stdout, planData); err != nil {
+				return err
+			}
+		default:
+			if err := formats.JSON(os.Stdout, planData); err != nil {
+				return err
+			}
+		}
 		return nil
 	},
 }

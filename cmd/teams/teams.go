@@ -94,5 +94,5 @@ var TeamsCmd = &cobra.Command{
 func init() {
 	cmd.RootCmd.AddCommand(TeamsCmd)
 
-	TeamsCmd.Flags().String("format", "json", "Choose the output's format: table / json")
+	TeamsCmd.PersistentFlags().String("format", "json", "Choose the output's format: table / json")
 }

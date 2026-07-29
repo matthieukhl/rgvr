@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Modified
 
 - `teams` command now supports `--format` flag to chosse between different output formats (table, json).
+- `teams plan` command now supports `--format` flag to chosse between different output formats (table, json).
 
 ### Removed
 
