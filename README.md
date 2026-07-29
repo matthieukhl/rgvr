@@ -2,7 +2,7 @@
 
 `rgvr` is a command-line tool written in Go for interacting with [Ringover](https://www.ringover.com)'s public API — manage and query your teams, users, calls, and more, directly from your terminal.
 
-> **Disclaimer**: rgvr is an independent, community-built tool. It is not affiliated with, endorsed by, or supported by Ringover.
+> **Disclaimer**: rgvr is an independent, community-built tool. It is not affiliated with, endorsed by, or supported by Ringover.  
 > **Status**: Work in progress. Commands are being added incrementally as Ringover's API endpoints are covered. Expect breaking changes until a `v1.0.0` release.
 
 ## Prerequisites
@@ -74,6 +74,34 @@ make build
 ## Changelog
 
 See [Changelog](CHANGELOG.md).
+
+## Roadmap
+
+- 🟢 `/teams` endpoint
+- 🟡 `/users` endpoint
+- 🔴 `/groups` endpoint
+- 🔴 `/numbers` endpoint
+- 🔴 `/ivrs` endpoint
+- 🔴 `/tags` endpoint
+- 🔴 `/conferences` endpoint
+- 🔴 `/calls` endpoint
+- 🔴 `/campaigns` endpoint
+- 🔴 `/channels` endpoint
+- 🔴 `/contacts` endpoint
+- 🔴 `/conversations` endpoint
+- 🔴 `/messages` endpoint
+- 🔴 `/sms` endpoint
+- 🔴 `/profiles` endpoint
+- 🔴 `/blacklist` endpoint
+- 🔴 `/webhook` endpoint
+- 🔴 `/callbacks` endpoint
+- 🔴 `/surveys` endpoint
+- 🔴 `/snoozes` endpoint
+- 🔴 `/transcriptions` endpoint
+- 🔴 `/empower` endpoint
+- 🔴 `/whatsapp` endpoint
+- 🔴 `/task` endpoint
+- 🔴 `/mcp` endpoint
 
 ## Links
 
