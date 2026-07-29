@@ -16,7 +16,7 @@
 	    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package cmd
+package auth
 
 import (
 	"fmt"
@@ -49,5 +49,5 @@ the config file (~/.config/rgvr/config.yaml).`,
 }
 
 func init() {
-	authCmd.AddCommand(logoutCmd)
+	AuthCmd.AddCommand(logoutCmd)
 }

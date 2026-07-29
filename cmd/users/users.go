@@ -16,18 +16,19 @@
 	    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package cmd
+package users
 
 import (
 	"context"
 	"fmt"
 
+	"github.com/matthieukhl/rgvr/cmd"
 	"github.com/matthieukhl/rgvr/internal"
 	"github.com/spf13/cobra"
 )
 
-// usersCmd represents the users command
-var usersCmd = &cobra.Command{
+// UsersCmd represents the users command
+var UsersCmd = &cobra.Command{
 	Use:   "users",
 	Short: "A brief description of your command",
 	Long: `A longer description that spans multiple lines and likely contains examples
@@ -36,18 +37,18 @@ and usage of using your command. For example:
 Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
-	PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
+	PersistentPreRunE: func(cd *cobra.Command, args []string) error {
 		client, err := internal.NewClient()
 		if err != nil {
 			return fmt.Errorf("creating client: %w", err)
 		}
 
-		ctx := context.WithValue(cmd.Context(), clientContextKey, client)
-		cmd.SetContext(ctx)
+		ctx := context.WithValue(cd.Context(), internal.ClientContextKey, client)
+		cd.SetContext(ctx)
 		return nil
 	},
 }
 
 func init() {
-	rootCmd.AddCommand(usersCmd)
+	cmd.RootCmd.AddCommand(UsersCmd)
 }

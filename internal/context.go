@@ -16,8 +16,8 @@
 	    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package cmd
+package internal
 
-type contextKey string
+type ContextKey string
 
-const clientContextKey contextKey = "client"
+const ClientContextKey ContextKey = "client"

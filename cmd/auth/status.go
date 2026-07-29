@@ -16,7 +16,7 @@
 	    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package cmd
+package auth
 
 import (
 	"fmt"
@@ -62,5 +62,5 @@ a test request to the API. If the API key is valid, it will return a success mes
 }
 
 func init() {
-	authCmd.AddCommand(statusCmd)
+	AuthCmd.AddCommand(statusCmd)
 }

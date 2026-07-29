@@ -16,7 +16,7 @@
 	    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package cmd
+package users
 
 import (
 	"encoding/json"
@@ -37,10 +37,10 @@ var listCmd = &cobra.Command{
 	Long: `Retrieves users from your team. Each user object includes
 the user's profile information, assigned phone numbers, status, and configuration.
 The total number of users is indicated in the list_count field.`,
-	RunE: func(cmd *cobra.Command, args []string) error {
+	RunE: func(cd *cobra.Command, args []string) error {
 		path := "/users"
 
-		client := cmd.Context().Value(clientContextKey).(*internal.Client)
+		client := cd.Context().Value(internal.ClientContextKey).(*internal.Client)
 
 		start := time.Now()
 		resp, err := client.Get(path)
@@ -60,7 +60,7 @@ The total number of users is indicated in the list_count field.`,
 			return err
 		}
 
-		format, err := cmd.Flags().GetString("format")
+		format, err := cd.Flags().GetString("format")
 		if err != nil {
 			return err
 		}
@@ -77,7 +77,7 @@ The total number of users is indicated in the list_count field.`,
 			formats.JSON(os.Stdout, usersResponse)
 		}
 
-		verbose, err := cmd.Flags().GetBool("verbose")
+		verbose, err := cd.Flags().GetBool("verbose")
 		if verbose {
 			fmt.Fprintf(os.Stderr, "\nURL called: %s\n", resp.Request.URL.String())
 			fmt.Fprintf(os.Stderr, "Query duration: %d ms\n", duration.Milliseconds())
@@ -88,7 +88,7 @@ The total number of users is indicated in the list_count field.`,
 }
 
 func init() {
-	usersCmd.AddCommand(listCmd)
+	UsersCmd.AddCommand(listCmd)
 	listCmd.Flags().BoolP("verbose", "v", false, "Display detailed information about each user")
 	listCmd.Flags().String("format", "json", "Choose the output's format: table / json")
 }

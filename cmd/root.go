@@ -28,8 +28,8 @@ import (
 	"github.com/spf13/viper"
 )
 
-// rootCmd represents the base command when called without any subcommands
-var rootCmd = &cobra.Command{
+// RootCmd represents the base command when called without any subcommands
+var RootCmd = &cobra.Command{
 	Use:     "rgvr",
 	Version: appVersion,
 	Short:   "A CLI to interact with Ringover's public API.",
@@ -38,9 +38,9 @@ It allows you to manage your Ringover account directly from the command line.`,
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
-// This is called by main.main(). It only needs to happen once to the rootCmd.
+// This is called by main.main(). It only needs to happen once to the RootCmd.
 func Execute() {
-	err := rootCmd.Execute()
+	err := RootCmd.Execute()
 	if err != nil {
 		os.Exit(1)
 	}
@@ -48,7 +48,7 @@ func Execute() {
 
 func init() {
 	cobra.OnInitialize(initConfig)
-	rootCmd.PersistentFlags().String("api-key", "", "Your Ringover API key set by using the `rgvr auth login` command")
+	RootCmd.PersistentFlags().String("api-key", "", "Your Ringover API key set by using the `rgvr auth login` command")
 }
 
 func initConfig() {
@@ -73,7 +73,7 @@ func initConfig() {
 		}
 	}
 
-	if err := viper.BindPFlag("api_key", rootCmd.PersistentFlags().Lookup("api-key")); err != nil {
+	if err := viper.BindPFlag("api_key", RootCmd.PersistentFlags().Lookup("api-key")); err != nil {
 		fmt.Fprintf(os.Stderr, "Error binding API key flag: %v\n", err)
 		os.Exit(1)
 	}

@@ -16,7 +16,7 @@
 	    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package cmd
+package auth
 
 import (
 	"fmt"
@@ -72,7 +72,7 @@ var loginCmd = &cobra.Command{
 }
 
 func init() {
-	authCmd.AddCommand(loginCmd)
+	AuthCmd.AddCommand(loginCmd)
 }
 
 func registerAPIKey() (string, error) {

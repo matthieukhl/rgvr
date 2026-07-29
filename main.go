@@ -18,7 +18,12 @@
 
 package main
 
-import "github.com/matthieukhl/rgvr/cmd"
+import (
+	"github.com/matthieukhl/rgvr/cmd"
+	_ "github.com/matthieukhl/rgvr/cmd/auth"
+	_ "github.com/matthieukhl/rgvr/cmd/teams"
+	_ "github.com/matthieukhl/rgvr/cmd/users"
+)
 
 func main() {
 	cmd.Execute()

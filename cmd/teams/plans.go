@@ -16,7 +16,7 @@
 	    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package cmd
+package teams
 
 import (
 	"encoding/json"
@@ -37,10 +37,10 @@ var planCmd = &cobra.Command{
 	Long: `Retrieves a list of plans associated with your team,
 including the number of licences used and the total number
 of licences for each plan.`,
-	RunE: func(cmd *cobra.Command, args []string) error {
+	RunE: func(cd *cobra.Command, args []string) error {
 		path := "/teams/plans_data"
 
-		client := cmd.Context().Value(clientContextKey).(*internal.Client)
+		client := cd.Context().Value(internal.ClientContextKey).(*internal.Client)
 
 		resp, err := client.Get(path)
 		if err != nil {
@@ -79,5 +79,5 @@ of licences for each plan.`,
 }
 
 func init() {
-	teamsCmd.AddCommand(planCmd)
+	TeamsCmd.AddCommand(planCmd)
 }

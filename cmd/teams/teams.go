@@ -16,7 +16,7 @@
 	    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package cmd
+package teams
 
 import (
 	"context"
@@ -24,6 +24,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/matthieukhl/rgvr/cmd"
 	"github.com/matthieukhl/rgvr/internal"
 	"github.com/matthieukhl/rgvr/internal/models"
 	"github.com/olekukonko/tablewriter"
@@ -31,24 +32,24 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// teamsCmd represents the teams command
-var teamsCmd = &cobra.Command{
+// TeamsCmd represents the teams command
+var TeamsCmd = &cobra.Command{
 	Use:   "teams",
 	Short: "Retrieve team information.",
 	Long:  `Retrieves a complete team object containing lists of numbers, users, ivrs, conferences, tags and groups.`,
-	PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
+	PersistentPreRunE: func(cd *cobra.Command, args []string) error {
 		client, err := internal.NewClient()
 		if err != nil {
 			return fmt.Errorf("creating client: %w", err)
 		}
 
-		ctx := context.WithValue(cmd.Context(), clientContextKey, client)
-		cmd.SetContext(ctx)
+		ctx := context.WithValue(cd.Context(), internal.ClientContextKey, client)
+		cd.SetContext(ctx)
 		return nil
 	},
-	RunE: func(cmd *cobra.Command, args []string) error {
+	RunE: func(cd *cobra.Command, args []string) error {
 		path := "/teams"
-		client := cmd.Context().Value(clientContextKey).(*internal.Client)
+		client := cd.Context().Value(internal.ClientContextKey).(*internal.Client)
 
 		resp, err := client.Get(path)
 		if err != nil {
@@ -92,16 +93,17 @@ var teamsCmd = &cobra.Command{
 	},
 }
 
-func init() {
-	rootCmd.AddCommand(teamsCmd)
 
+func init() {
+	cmd.RootCmd.AddCommand(TeamsCmd)
+	
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command
 	// and all subcommands, e.g.:
-	// teamsCmd.PersistentFlags().String("foo", "", "A help for foo")
+	// TeamsCmd.PersistentFlags().String("foo", "", "A help for foo")
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
-	// teamsCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	// TeamsCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
