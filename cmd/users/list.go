@@ -88,5 +88,4 @@ The total number of users is indicated in the list_count field.`,
 
 func init() {
 	UsersCmd.AddCommand(listCmd)
-	listCmd.Flags().String("format", "json", "Choose the output's format: table / json")
 }

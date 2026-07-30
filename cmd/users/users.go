@@ -52,4 +52,5 @@ to quickly create a Cobra application.`,
 
 func init() {
 	cmd.RootCmd.AddCommand(UsersCmd)
+	cmd.RootCmd.PersistentFlags().String("format", "json", "Choose the output's format: table / json")
 }
