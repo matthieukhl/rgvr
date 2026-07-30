@@ -30,8 +30,9 @@ import (
 // UsersCmd represents the users command
 var UsersCmd = &cobra.Command{
 	Use:   "users",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
+	Short: "A brief description of your command", // TODO: change short description
+	// TODO: change long description
+	Long: `A longer description that spans multiple lines and likely contains examples 
 and usage of using your command. For example:
 
 Cobra is a CLI library for Go that empowers applications.

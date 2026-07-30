@@ -25,6 +25,7 @@ import (
 	"time"
 
 	"github.com/matthieukhl/rgvr/internal"
+	"github.com/matthieukhl/rgvr/internal/flags"
 	"github.com/matthieukhl/rgvr/internal/formats"
 	"github.com/matthieukhl/rgvr/internal/models"
 	"github.com/spf13/cobra"
@@ -77,10 +78,8 @@ The total number of users is indicated in the list_count field.`,
 			formats.JSON(os.Stdout, usersResponse)
 		}
 
-		verbose, err := cd.Flags().GetBool("verbose")
-		if verbose {
-			fmt.Fprintf(os.Stderr, "\nURL called: %s\n", resp.Request.URL.String())
-			fmt.Fprintf(os.Stderr, "Query duration: %d ms\n", duration.Milliseconds())
+		if err = flags.IsVerbose(cd, resp, duration); err != nil {
+			return err
 		}
 
 		return nil
@@ -89,6 +88,5 @@ The total number of users is indicated in the list_count field.`,
 
 func init() {
 	UsersCmd.AddCommand(listCmd)
-	listCmd.Flags().BoolP("verbose", "v", false, "Display detailed information about each user")
 	listCmd.Flags().String("format", "json", "Choose the output's format: table / json")
 }

@@ -49,6 +49,7 @@ func Execute() {
 func init() {
 	cobra.OnInitialize(initConfig)
 	RootCmd.PersistentFlags().String("api-key", "", "Your Ringover API key set by using the `rgvr auth login` command")
+	RootCmd.PersistentFlags().BoolP("verbose", "v", false, "Display additional information about command execution")
 }
 
 func initConfig() {
