@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added `users` command.
 - Added `users list` command that retrieves the list of users from the `/users` endpoint.
 - Added `--format` flag to `users list` command to choose between different output formats (table, json).
+- Added `users get <user_id>` command to retrieve a user's information based on a user ID.
 
 ### Modified
 
