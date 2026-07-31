@@ -19,23 +19,28 @@
 package users
 
 import (
-	"fmt"
-
 	"github.com/spf13/cobra"
 )
 
 // presencesCmd represents the presences command
 var presencesCmd = &cobra.Command{
 	Use:   "presences",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+	Short: "Retrieves the current presence status for a specific user",
+	Long: `Retrieves the current presence status for a specific user — whether they are available,
+on a call, in snooze mode, or offline. The presence data includes the user's current availability state,
+active snooze information (if any), and the device they are connected from.
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
-	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("presences called")
+Permission:
+	
+	Users Read required.
+
+Monitoring impact:
+
+	OFF: Returns presence only if userId matches your own user ID. Requesting another user's presence returns 404.
+	ON: Returns any user's presence in the team. For a bulk view of all team presences, use GET /presences instead (also requires Monitoring ON).`,
+	RunE: func(cmd *cobra.Command, args []string) error {
+
+		return nil
 	},
 }
 
