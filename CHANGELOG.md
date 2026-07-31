@@ -9,7 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Added `groups` command to list groups.
+- Added `groups` command to list groups: retrieves call groups (ring groups) configured for your team.  
+- Added `groups get <group_id>` command: retrieves detailed information about a specific call group
 
 ## [0.3.0-beta] - 2026-07-31
 
