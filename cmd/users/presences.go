@@ -19,6 +19,15 @@
 package users
 
 import (
+	"encoding/json"
+	"fmt"
+	"os"
+	"time"
+
+	"github.com/matthieukhl/rgvr/internal"
+	"github.com/matthieukhl/rgvr/internal/flags"
+	"github.com/matthieukhl/rgvr/internal/formats"
+	"github.com/matthieukhl/rgvr/internal/models"
 	"github.com/spf13/cobra"
 )
 
@@ -38,7 +47,51 @@ Monitoring impact:
 
 	OFF: Returns presence only if userId matches your own user ID. Requesting another user's presence returns 404.
 	ON: Returns any user's presence in the team. For a bulk view of all team presences, use GET /presences instead (also requires Monitoring ON).`,
+	Args: cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
+		userID := args[0]
+		path := fmt.Sprintf("/users/%s/presences", userID)
+
+		client := cmd.Context().Value(internal.ClientContextKey).(*internal.Client)
+
+		start := time.Now()
+		resp, err := client.Get(path)
+		if err != nil {
+			return err
+		}
+		defer resp.Body.Close()
+
+		duration := time.Since(start)
+
+		if resp.StatusCode != 200 {
+			return fmt.Errorf("unexpected response from API: %s", resp.Status)
+		}
+
+		var presence models.Presence
+
+		if err = json.NewDecoder(resp.Body).Decode(&presence); err != nil {
+			return fmt.Errorf("decoding presence information: %w", err)
+		}
+
+		format, err := cmd.Flags().GetString("format")
+		if err != nil {
+			return fmt.Errorf("retrieving format flag: %w", err)
+		}
+
+		switch format {
+		case "table":
+			if err = formats.Table(os.Stdout, []models.Presence{presence}); err != nil {
+				return err
+			}
+		default:
+			if err = formats.JSON(os.Stdout, presence); err != nil {
+				return err
+			}
+		}
+
+		if err := flags.IsVerbose(cmd, resp, duration); err != nil {
+			return err
+		}
 
 		return nil
 	},

@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added `--format` flag to `users list` command to choose between different output formats (table, json).
 - Added `users get <user_id>` command to retrieve a user's information based on a user ID.
 - Added `users plannings get <user_id>` command to retrieve a user's planning based on a user ID.
+- Added `users presences <user_id>` command to retrieve a user's presence status based on a user ID.
 
 ### Modified
 
