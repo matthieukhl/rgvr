@@ -18,7 +18,7 @@ import (
 
 // planningsGetCmd represents the planningsGet command
 var planningsGetCmd = &cobra.Command{
-	Use:   "get",
+	Use:   "get <user_id>",
 	Short: "Retrieves a user's weekly availability planning — the time slots during which the user is reachable via Ringover.",
 	Long: `Retrieves a user's weekly availability planning — the time slots during which the user is reachable via Ringover.
 	The response contains a planning for each day of the week with start/end time ranges.

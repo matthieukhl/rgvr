@@ -33,7 +33,7 @@ import (
 
 // presencesCmd represents the presences command
 var presencesCmd = &cobra.Command{
-	Use:   "presences",
+	Use:   "presences <user_id>",
 	Short: "Retrieves the current presence status for a specific user",
 	Long: `Retrieves the current presence status for a specific user — whether they are available,
 on a call, in snooze mode, or offline. The presence data includes the user's current availability state,
