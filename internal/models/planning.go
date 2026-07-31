@@ -18,7 +18,11 @@
 
 package models
 
-import "time"
+import (
+	"fmt"
+	"strings"
+	"time"
+)
 
 type Planning struct {
 	TeamID         int         `json:"team_id"`
@@ -35,4 +39,43 @@ type TimeRange struct {
 	Day   int `json:"day"`
 	Start int `json:"start"`
 	End   int `json:"end"`
+}
+
+func (p Planning) TableHeader() []string {
+	return []string{
+		"TeamID",
+		"UserID",
+		"TzIdentifier",
+		"TzNow",
+		"PlanningEnable",
+		"IsSnoozed",
+		"IsPlanning",
+		"TimeRanges",
+	}
+}
+
+func (p Planning) TableRow() []string {
+	timeRanges := parseTimeRangeSlice(p.TimeRanges)
+
+	return []string{
+		fmt.Sprintf("%d", p.TeamID),
+		fmt.Sprintf("%d", p.UserID),
+		p.TzIdentifier,
+		p.TzNow.String(),
+		fmt.Sprintf("%t", p.PlanningEnable),
+		fmt.Sprintf("%t", p.IsPlanning),
+		fmt.Sprintf("%t", p.IsSnoozed),
+		timeRanges,
+	}
+}
+
+// Helper function that parses a slice of TimeRange into a string.
+func parseTimeRangeSlice(timeRanges []TimeRange) string {
+	var timeRangesList []string
+
+	for _, timeRange := range timeRanges {
+		timeRangesList = append(timeRangesList, fmt.Sprintf("Day: %d - Start: %d - End: %d\n", timeRange.Day, timeRange.Day, timeRange.End))
+	}
+
+	return strings.Join(timeRangesList, " ")
 }
