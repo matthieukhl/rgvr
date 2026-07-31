@@ -24,7 +24,7 @@ import (
 
 // planningsCmd represents the plannings command
 var planningsCmd = &cobra.Command{
-	Use:   "planning",
+	Use:   "plannings",
 	Short: "Manage users' plannings",
 	Long:  `TODO`,
 }
