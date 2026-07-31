@@ -16,30 +16,39 @@
 	    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package auth
+package users
 
 import (
-	"github.com/matthieukhl/rgvr/cmd"
+	"fmt"
+
 	"github.com/spf13/cobra"
 )
 
-// AuthCmd represents the auth command
-var AuthCmd = &cobra.Command{
-	Use:   "auth",
-	Short: "Login, logout, and manage your Ringover API key",
-	Long:  `The auth command allows you to log in, log out, and manage your Ringover API key.`,
+// presencesCmd represents the presences command
+var presencesCmd = &cobra.Command{
+	Use:   "presences",
+	Short: "A brief description of your command",
+	Long: `A longer description that spans multiple lines and likely contains examples
+and usage of using your command. For example:
+
+Cobra is a CLI library for Go that empowers applications.
+This application is a tool to generate the needed files
+to quickly create a Cobra application.`,
+	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Println("presences called")
+	},
 }
 
 func init() {
-	cmd.RootCmd.AddCommand(AuthCmd)
+	UsersCmd.AddCommand(presencesCmd)
 
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command
 	// and all subcommands, e.g.:
-	AuthCmd.PersistentFlags().String("login", "", "Register your Ringover API key")
+	// presencesCmd.PersistentFlags().String("foo", "", "A help for foo")
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
-	// AuthCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	// presencesCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
