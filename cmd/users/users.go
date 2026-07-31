@@ -30,14 +30,20 @@ import (
 // UsersCmd represents the users command
 var UsersCmd = &cobra.Command{
 	Use:   "users",
-	Short: "A brief description of your command", // TODO: change short description
-	// TODO: change long description
-	Long: `A longer description that spans multiple lines and likely contains examples 
-and usage of using your command. For example:
+	Short: "Manage your Ringover team members",
+	Long: `Manage your Ringover team members.
+Retrieve user information, manage plannings, check availability (presences/snooze), and organize user blacklists.
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+Permissions required:
+
+	Read (Users R): Get user details, plannings, presences, user blacklists.
+	Write (Users W): Modify plannings, manage group members, manage user blacklists, modify snooze status.
+
+Monitoring impact:
+
+	OFF: GET requests return only your own user data, planning, and presence. Group listing returns only groups you belong to.
+	ON: GET requests return all team users, plannings, and presences. You can modify any user's planning.
+`,
 	PersistentPreRunE: func(cd *cobra.Command, args []string) error {
 		client, err := internal.NewClient()
 		if err != nil {
