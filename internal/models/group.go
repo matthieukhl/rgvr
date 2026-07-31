@@ -56,6 +56,7 @@ func (g Group) TableRow() []string {
 	}
 }
 
+// Helper function that parses a slice of Users and returns a string.
 func parseUsersSlice(users []User) string {
 	var userConcatNames []string
 

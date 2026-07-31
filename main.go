@@ -21,6 +21,7 @@ package main
 import (
 	"github.com/matthieukhl/rgvr/cmd"
 	_ "github.com/matthieukhl/rgvr/cmd/auth"
+	_ "github.com/matthieukhl/rgvr/cmd/groups"
 	_ "github.com/matthieukhl/rgvr/cmd/teams"
 	_ "github.com/matthieukhl/rgvr/cmd/users"
 )
