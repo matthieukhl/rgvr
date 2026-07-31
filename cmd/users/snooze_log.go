@@ -51,6 +51,15 @@ Monitoring:
 		userID := args[0]
 		path := fmt.Sprintf("/users/%s/snooze/log", userID)
 
+		params, err := flags.BuildPaginationParams(cmd)
+		if err != nil {
+			return err
+		}
+
+		if len(params) > 0 {
+			path += "?" + params.Encode()
+		}
+
 		client := cmd.Context().Value(internal.ClientContextKey).(*internal.Client)
 
 		start := time.Now()
@@ -115,5 +124,6 @@ func init() {
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
-	// logCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	logCmd.Flags().IntP("limit", "l", 0, "Maximum number of results to return per page. Default: server-defined.")
+	logCmd.Flags().Int("offset", 0, "Number of results to skip for pagination. Default: 0.")
 }
