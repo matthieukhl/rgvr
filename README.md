@@ -78,7 +78,7 @@ See [Changelog](CHANGELOG.md).
 ## Roadmap
 
 - 🟢 `/teams` endpoint
-- 🟡 `/users` endpoint
+- 🟡 `/users` endpoint (`GET` endpoints have been implemented)
 - 🔴 `/groups` endpoint
 - 🔴 `/numbers` endpoint
 - 🔴 `/ivrs` endpoint
