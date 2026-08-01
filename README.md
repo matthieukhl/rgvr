@@ -10,6 +10,14 @@
 - Go 1.21+ (for building from source)
 - A valid Ringover API key (create one from your Ringover Dashboard under **Developer > API key**)
 
+### API key permissions
+
+Ringover API keys have granular permissions across 7 categories (Calls, Contacts, Users, Numbers, IVRs, Conversations, Empower), each configurable as None, Read, Write, or Read+Write, plus a separate **Monitoring** toggle that controls whether a key can access your own data only (Monitoring OFF) or your entire team's data (Monitoring ON).
+
+`rgvr` commands map to different permission categories and monitoring requirements depending on the endpoint they call — for example, `rgvr users list` requires `Users Read`, while `rgvr groups toggle-access` requires Monitoring to be enabled. **To use all commands, your API key should have Read+Write access to every category, with Monitoring enabled.**
+
+If a command fails with a `401 Unauthorized` error, check that your key has the required permission and/or Monitoring enabled for that specific operation. See the [Ringover API documentation](https://developer.ringover.com) for the exact requirements of each endpoint.
+
 ## Installation
 
 ### From source
