@@ -19,13 +19,12 @@
 package groups
 
 import (
-	"encoding/json"
 	"fmt"
-	"strconv"
 	"strings"
 	"time"
 
 	"github.com/matthieukhl/rgvr/internal"
+	"github.com/matthieukhl/rgvr/internal/convert"
 	"github.com/matthieukhl/rgvr/internal/flags"
 	"github.com/spf13/cobra"
 )
@@ -50,7 +49,7 @@ Monitoring:
 		groupID := args[0]
 		userIDs := args[1:]
 
-		parsedUserIDs, err := stringIDsToBytes(userIDs)
+		parsedUserIDs, err := convert.StringIDsToJSON(userIDs)
 		if err != nil {
 			return fmt.Errorf("parsing user IDs: %w", err)
 		}
@@ -80,24 +79,6 @@ Monitoring:
 
 		return nil
 	},
-}
-
-func stringIDsToBytes(ids []string) ([]byte, error) {
-	intIDs := make([]int, len(ids))
-	for i, id := range ids {
-		n, err := strconv.Atoi(id)
-		if err != nil {
-			return nil, fmt.Errorf("converting string ID to int: %w", err)
-		}
-		intIDs[i] = n
-	}
-
-	body, err := json.Marshal(intIDs)
-	if err != nil {
-		return nil, fmt.Errorf("marshalling user IDs: %w", err)
-	}
-
-	return body, nil
 }
 
 func printSuccess(groupID string, userIDs []string) {
