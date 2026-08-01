@@ -19,6 +19,7 @@
 package internal
 
 import (
+	"bytes"
 	"fmt"
 	"net/http"
 
@@ -66,6 +67,24 @@ func (c *Client) Get(path string) (*http.Response, error) {
 	}
 
 	req.Header.Set("Authorization", c.APIKey)
+
+	resp, err := c.HTTPClient.Do(req)
+	if err != nil {
+		return nil, fmt.Errorf("making request: %w", err)
+	}
+
+	return resp, nil
+}
+
+func (c *Client) Post(path string, body []byte) (*http.Response, error) {
+	url := fmt.Sprintf("%s%s", c.BaseURL, path)
+	req, err := http.NewRequest("POST", url, bytes.NewReader(body))
+	if err != nil {
+		return nil, fmt.Errorf("creating request: %w", err)
+	}
+
+	req.Header.Set("Authorization", c.APIKey)
+	req.Header.Set("Content-Type", "application/json")
 
 	resp, err := c.HTTPClient.Do(req)
 	if err != nil {
