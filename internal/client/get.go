@@ -21,39 +21,22 @@ package client
 import (
 	"fmt"
 	"net/http"
-
-	"github.com/matthieukhl/rgvr/internal/api"
-	"github.com/spf13/viper"
 )
 
-type Client struct {
-	HTTPClient *http.Client
-	BaseURL    string
-	APIKey     string
-}
-
-// NewClient creates a new Client instance with the API key and region from the configuration.
-func NewClient() (*Client, error) {
-	apiKey, err := api.GetAPIKey()
+// Get makes a GET request to the specified path using the client's API key for authorization.
+func (c *Client) Get(path string) (*http.Response, error) {
+	url := fmt.Sprintf("%s%s", c.BaseURL, path)
+	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("creating request: %w", err)
 	}
 
-	region := viper.GetString("region")
+	req.Header.Set("Authorization", c.APIKey)
 
-	var baseURL string
-	switch region {
-	case "eu":
-		baseURL = api.EUBaseURL
-	case "us":
-		baseURL = api.USBaseURL
-	default:
-		return nil, fmt.Errorf("invalid region: %s. Valid regions are 'eu' and 'us'", region)
+	resp, err := c.HTTPClient.Do(req)
+	if err != nil {
+		return nil, fmt.Errorf("making request: %w", err)
 	}
 
-	return &Client{
-		HTTPClient: &http.Client{},
-		BaseURL:    baseURL,
-		APIKey:     apiKey,
-	}, nil
+	return resp, nil
 }
