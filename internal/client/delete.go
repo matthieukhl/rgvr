@@ -22,22 +22,30 @@ import (
 	"bytes"
 	"fmt"
 	"net/http"
+	"time"
 )
 
-func (c *Client) Delete(path string, body []byte) (*http.Response, error) {
+func (c *Client) Delete(path string, body []byte) (*http.Response, *RequestInfo, error) {
 	url := fmt.Sprintf("%s%s", c.BaseURL, path)
+	reqInfo := &RequestInfo{}
 	req, err := http.NewRequest("DELETE", url, bytes.NewReader(body))
 	if err != nil {
-		return nil, fmt.Errorf("creating request: %w", err)
+		return nil, nil, fmt.Errorf("creating request: %w", err)
 	}
 
 	req.Header.Set("Authorization", c.APIKey)
 	req.Header.Set("Content-Type", "application/json")
 
+	start := time.Now()
 	resp, err := c.HTTPClient.Do(req)
 	if err != nil {
-		return nil, fmt.Errorf("making request: %w", err)
+		return nil, nil, fmt.Errorf("making request: %w", err)
 	}
 
-	return resp, nil
+	duration := time.Since(start)
+
+	reqInfo.URL = resp.Request.URL.String()
+	reqInfo.Duration = duration
+
+	return resp, reqInfo, nil
 }

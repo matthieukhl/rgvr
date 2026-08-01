@@ -22,7 +22,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
-	"time"
 
 	"github.com/matthieukhl/rgvr/internal/client"
 	"github.com/matthieukhl/rgvr/internal/flags"
@@ -43,13 +42,11 @@ The total number of users is indicated in the list_count field.`,
 
 		client := cd.Context().Value(client.ClientContextKey).(*client.Client)
 
-		start := time.Now()
-		resp, err := client.Get(path)
+		resp, reqInfo, err := client.Get(path)
 		if err != nil {
 			return err
 		}
 		defer resp.Body.Close()
-		duration := time.Since(start)
 
 		if resp.StatusCode != 200 {
 			return fmt.Errorf("unexpected response from API: %s", resp.Status)
@@ -78,7 +75,7 @@ The total number of users is indicated in the list_count field.`,
 			formats.JSON(os.Stdout, usersResponse)
 		}
 
-		if err = flags.IsVerbose(cd, resp, duration); err != nil {
+		if err = flags.IsVerbose(cd, reqInfo); err != nil {
 			return err
 		}
 

@@ -21,6 +21,7 @@ package client
 import (
 	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/matthieukhl/rgvr/internal/api"
 	"github.com/spf13/viper"
@@ -30,6 +31,11 @@ type Client struct {
 	HTTPClient *http.Client
 	BaseURL    string
 	APIKey     string
+}
+
+type RequestInfo struct {
+	URL      string
+	Duration time.Duration
 }
 
 // NewClient creates a new Client instance with the API key and region from the configuration.

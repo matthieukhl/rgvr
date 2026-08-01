@@ -23,6 +23,7 @@ import (
 	"net/http"
 
 	"github.com/matthieukhl/rgvr/internal/client"
+	"github.com/matthieukhl/rgvr/internal/flags"
 	"github.com/spf13/cobra"
 )
 
@@ -42,7 +43,7 @@ a test request to the API. If the API key is valid, it will return a success mes
 		// Make a test request to the API to check if the API key is valid
 		path := "/users?limit_count=1" // A simple endpoint that requires authentication as Ringover's public API does not have a dedicated endpoint for checking API key validity
 
-		resp, err := httpClient.Get(path)
+		resp, reqInfo, err := httpClient.Get(path)
 		if err != nil {
 			return fmt.Errorf("making test request: %w", err)
 		}
@@ -54,6 +55,10 @@ a test request to the API. If the API key is valid, it will return a success mes
 
 		if resp.StatusCode != http.StatusOK {
 			return fmt.Errorf("unexpected response from API: %s", resp.Status)
+		}
+
+		if err := flags.IsVerbose(cmd, reqInfo); err != nil {
+			return err
 		}
 
 		fmt.Println("API key is valid.")

@@ -20,22 +20,21 @@ package flags
 
 import (
 	"fmt"
-	"net/http"
 	"os"
-	"time"
 
+	"github.com/matthieukhl/rgvr/internal/client"
 	"github.com/spf13/cobra"
 )
 
-func IsVerbose(cmd *cobra.Command, resp *http.Response, duration time.Duration) error {
+func IsVerbose(cmd *cobra.Command, requestInfo *client.RequestInfo) error {
 	verbose, err := cmd.Flags().GetBool("verbose")
 	if err != nil {
 		return err
 	}
 
 	if verbose {
-		fmt.Fprintf(os.Stderr, "\nURL called: %s\n", resp.Request.URL.String())
-		fmt.Fprintf(os.Stderr, "Query duration: %d ms\n", duration.Milliseconds())
+		fmt.Fprintf(os.Stderr, "\nURL called: %s\n", requestInfo.URL)
+		fmt.Fprintf(os.Stderr, "Query duration: %d ms\n", requestInfo.Duration.Milliseconds())
 	}
 
 	return nil

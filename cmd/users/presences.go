@@ -22,7 +22,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
-	"time"
 
 	"github.com/matthieukhl/rgvr/internal/client"
 	"github.com/matthieukhl/rgvr/internal/flags"
@@ -54,14 +53,11 @@ Monitoring impact:
 
 		client := cmd.Context().Value(client.ClientContextKey).(*client.Client)
 
-		start := time.Now()
-		resp, err := client.Get(path)
+		resp, reqInfo, err := client.Get(path)
 		if err != nil {
 			return err
 		}
 		defer resp.Body.Close()
-
-		duration := time.Since(start)
 
 		if resp.StatusCode != 200 {
 			return fmt.Errorf("unexpected response from API: %s", resp.Status)
@@ -89,7 +85,7 @@ Monitoring impact:
 			}
 		}
 
-		if err := flags.IsVerbose(cmd, resp, duration); err != nil {
+		if err := flags.IsVerbose(cmd, reqInfo); err != nil {
 			return err
 		}
 

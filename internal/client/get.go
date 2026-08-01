@@ -21,22 +21,29 @@ package client
 import (
 	"fmt"
 	"net/http"
+	"time"
 )
 
 // Get makes a GET request to the specified path using the client's API key for authorization.
-func (c *Client) Get(path string) (*http.Response, error) {
+func (c *Client) Get(path string) (*http.Response, *RequestInfo, error) {
 	url := fmt.Sprintf("%s%s", c.BaseURL, path)
+	requestInfo := &RequestInfo{}
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
-		return nil, fmt.Errorf("creating request: %w", err)
+		return nil, requestInfo, fmt.Errorf("creating request: %w", err)
 	}
 
 	req.Header.Set("Authorization", c.APIKey)
 
+	start := time.Now()
 	resp, err := c.HTTPClient.Do(req)
 	if err != nil {
-		return nil, fmt.Errorf("making request: %w", err)
+		return nil, requestInfo, fmt.Errorf("making request: %w", err)
 	}
+	duration := time.Since(start)
 
-	return resp, nil
+	requestInfo.URL = resp.Request.URL.String()
+	requestInfo.Duration = duration
+
+	return resp, requestInfo, nil
 }

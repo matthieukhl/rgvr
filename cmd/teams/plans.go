@@ -24,6 +24,7 @@ import (
 	"os"
 
 	"github.com/matthieukhl/rgvr/internal/client"
+	"github.com/matthieukhl/rgvr/internal/flags"
 	"github.com/matthieukhl/rgvr/internal/formats"
 	"github.com/matthieukhl/rgvr/internal/models"
 	"github.com/spf13/cobra"
@@ -41,7 +42,7 @@ of licences for each plan.`,
 
 		client := cd.Context().Value(client.ClientContextKey).(*client.Client)
 
-		resp, err := client.Get(path)
+		resp, reqInfo, err := client.Get(path)
 		if err != nil {
 			return fmt.Errorf("retrieving plan data: %w", err)
 		}
@@ -74,6 +75,10 @@ of licences for each plan.`,
 			if err := formats.JSON(os.Stdout, planData); err != nil {
 				return err
 			}
+		}
+
+		if err := flags.IsVerbose(cd, reqInfo); err != nil {
+			return err
 		}
 		return nil
 	},

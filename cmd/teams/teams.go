@@ -26,6 +26,7 @@ import (
 
 	"github.com/matthieukhl/rgvr/cmd"
 	"github.com/matthieukhl/rgvr/internal/client"
+	"github.com/matthieukhl/rgvr/internal/flags"
 	"github.com/matthieukhl/rgvr/internal/formats"
 	"github.com/matthieukhl/rgvr/internal/models"
 	"github.com/spf13/cobra"
@@ -50,7 +51,7 @@ var TeamsCmd = &cobra.Command{
 		path := "/teams"
 		client := cd.Context().Value(client.ClientContextKey).(*client.Client)
 
-		resp, err := client.Get(path)
+		resp, reqInfo, err := client.Get(path)
 		if err != nil {
 			return fmt.Errorf("retrieving team information: %w", err)
 		}
@@ -84,6 +85,10 @@ var TeamsCmd = &cobra.Command{
 			if err := formats.JSON(os.Stdout, team); err != nil {
 				return err
 			}
+		}
+
+		if err = flags.IsVerbose(cd, reqInfo); err != nil {
+			return err
 		}
 
 		return nil

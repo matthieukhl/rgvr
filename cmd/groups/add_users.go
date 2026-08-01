@@ -21,7 +21,6 @@ package groups
 import (
 	"fmt"
 	"strings"
-	"time"
 
 	"github.com/matthieukhl/rgvr/internal/client"
 	"github.com/matthieukhl/rgvr/internal/convert"
@@ -58,14 +57,11 @@ Monitoring:
 
 		client := cmd.Context().Value(client.ClientContextKey).(*client.Client)
 
-		start := time.Now()
-		resp, err := client.Post(path, parsedUserIDs)
+		resp, reqInfo, err := client.Post(path, parsedUserIDs)
 		if err != nil {
 			return err
 		}
 		defer resp.Body.Close()
-
-		duration := time.Since(start)
 
 		if resp.StatusCode != 200 {
 			return fmt.Errorf("unexpected response from API: %s", resp.Status)
@@ -73,7 +69,7 @@ Monitoring:
 
 		fmt.Printf("Successfully added user(s) %s to group %s\n", strings.Join(userIDs, ", "), groupID)
 
-		if err := flags.IsVerbose(cmd, resp, duration); err != nil {
+		if err := flags.IsVerbose(cmd, reqInfo); err != nil {
 			return err
 		}
 
