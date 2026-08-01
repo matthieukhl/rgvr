@@ -23,7 +23,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/matthieukhl/rgvr/internal"
+	"github.com/matthieukhl/rgvr/internal/client"
 	"github.com/matthieukhl/rgvr/internal/formats"
 	"github.com/matthieukhl/rgvr/internal/models"
 	"github.com/spf13/cobra"
@@ -39,7 +39,7 @@ of licences for each plan.`,
 	RunE: func(cd *cobra.Command, args []string) error {
 		path := "/teams/plans_data"
 
-		client := cd.Context().Value(internal.ClientContextKey).(*internal.Client)
+		client := cd.Context().Value(client.ClientContextKey).(*client.Client)
 
 		resp, err := client.Get(path)
 		if err != nil {

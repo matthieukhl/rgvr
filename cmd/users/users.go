@@ -23,7 +23,7 @@ import (
 	"fmt"
 
 	"github.com/matthieukhl/rgvr/cmd"
-	"github.com/matthieukhl/rgvr/internal"
+	"github.com/matthieukhl/rgvr/internal/client"
 	"github.com/spf13/cobra"
 )
 
@@ -45,12 +45,12 @@ Monitoring impact:
 	ON: GET requests return all team users, plannings, and presences. You can modify any user's planning.
 `,
 	PersistentPreRunE: func(cd *cobra.Command, args []string) error {
-		client, err := internal.NewClient()
+		httpClient, err := client.NewClient()
 		if err != nil {
 			return fmt.Errorf("creating client: %w", err)
 		}
 
-		ctx := context.WithValue(cd.Context(), internal.ClientContextKey, client)
+		ctx := context.WithValue(cd.Context(), client.ClientContextKey, httpClient)
 		cd.SetContext(ctx)
 		return nil
 	},

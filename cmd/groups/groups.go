@@ -26,7 +26,7 @@ import (
 	"time"
 
 	"github.com/matthieukhl/rgvr/cmd"
-	"github.com/matthieukhl/rgvr/internal"
+	"github.com/matthieukhl/rgvr/internal/client"
 	"github.com/matthieukhl/rgvr/internal/flags"
 	"github.com/matthieukhl/rgvr/internal/formats"
 	"github.com/matthieukhl/rgvr/internal/models"
@@ -57,12 +57,12 @@ Pagination:
 	this avoids the duplicates and gaps you would get from an unordered list.`,
 	Args: cobra.NoArgs,
 	PersistentPreRunE: func(cd *cobra.Command, args []string) error {
-		client, err := internal.NewClient()
+		httpClient, err := client.NewClient()
 		if err != nil {
 			return fmt.Errorf("creating client: %w", err)
 		}
 
-		ctx := context.WithValue(cd.Context(), internal.ClientContextKey, client)
+		ctx := context.WithValue(cd.Context(), client.ClientContextKey, httpClient)
 		cd.SetContext(ctx)
 		return nil
 	},
@@ -78,7 +78,7 @@ Pagination:
 			path += "?" + params.Encode()
 		}
 
-		client := cd.Context().Value(internal.ClientContextKey).(*internal.Client)
+		client := cd.Context().Value(client.ClientContextKey).(*client.Client)
 
 		start := time.Now()
 		resp, err := client.Get(path)

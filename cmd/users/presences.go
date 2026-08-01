@@ -24,7 +24,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/matthieukhl/rgvr/internal"
+	"github.com/matthieukhl/rgvr/internal/client"
 	"github.com/matthieukhl/rgvr/internal/flags"
 	"github.com/matthieukhl/rgvr/internal/formats"
 	"github.com/matthieukhl/rgvr/internal/models"
@@ -52,7 +52,7 @@ Monitoring impact:
 		userID := args[0]
 		path := fmt.Sprintf("/users/%s/presences", userID)
 
-		client := cmd.Context().Value(internal.ClientContextKey).(*internal.Client)
+		client := cmd.Context().Value(client.ClientContextKey).(*client.Client)
 
 		start := time.Now()
 		resp, err := client.Get(path)

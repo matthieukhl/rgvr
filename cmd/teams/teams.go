@@ -25,7 +25,7 @@ import (
 	"os"
 
 	"github.com/matthieukhl/rgvr/cmd"
-	"github.com/matthieukhl/rgvr/internal"
+	"github.com/matthieukhl/rgvr/internal/client"
 	"github.com/matthieukhl/rgvr/internal/formats"
 	"github.com/matthieukhl/rgvr/internal/models"
 	"github.com/spf13/cobra"
@@ -37,18 +37,18 @@ var TeamsCmd = &cobra.Command{
 	Short: "Retrieve team information.",
 	Long:  `Retrieves a complete team object containing lists of numbers, users, ivrs, conferences, tags and groups.`,
 	PersistentPreRunE: func(cd *cobra.Command, args []string) error {
-		client, err := internal.NewClient()
+		httpClient, err := client.NewClient()
 		if err != nil {
 			return fmt.Errorf("creating client: %w", err)
 		}
 
-		ctx := context.WithValue(cd.Context(), internal.ClientContextKey, client)
+		ctx := context.WithValue(cd.Context(), client.ClientContextKey, httpClient)
 		cd.SetContext(ctx)
 		return nil
 	},
 	RunE: func(cd *cobra.Command, args []string) error {
 		path := "/teams"
-		client := cd.Context().Value(internal.ClientContextKey).(*internal.Client)
+		client := cd.Context().Value(client.ClientContextKey).(*client.Client)
 
 		resp, err := client.Get(path)
 		if err != nil {

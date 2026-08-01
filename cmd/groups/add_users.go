@@ -23,7 +23,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/matthieukhl/rgvr/internal"
+	"github.com/matthieukhl/rgvr/internal/client"
 	"github.com/matthieukhl/rgvr/internal/convert"
 	"github.com/matthieukhl/rgvr/internal/flags"
 	"github.com/spf13/cobra"
@@ -56,7 +56,7 @@ Monitoring:
 
 		path := fmt.Sprintf("/groups/%s/users", groupID)
 
-		client := cmd.Context().Value(internal.ClientContextKey).(*internal.Client)
+		client := cmd.Context().Value(client.ClientContextKey).(*client.Client)
 
 		start := time.Now()
 		resp, err := client.Post(path, parsedUserIDs)

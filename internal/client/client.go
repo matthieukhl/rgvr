@@ -16,13 +16,14 @@
 	    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package internal
+package client
 
 import (
 	"bytes"
 	"fmt"
 	"net/http"
 
+	"github.com/matthieukhl/rgvr/internal/api"
 	"github.com/spf13/viper"
 )
 
@@ -34,7 +35,7 @@ type Client struct {
 
 // NewClient creates a new Client instance with the API key and region from the configuration.
 func NewClient() (*Client, error) {
-	apiKey, err := GetAPIKey()
+	apiKey, err := api.GetAPIKey()
 	if err != nil {
 		return nil, err
 	}
@@ -44,9 +45,9 @@ func NewClient() (*Client, error) {
 	var baseURL string
 	switch region {
 	case "eu":
-		baseURL = EUBaseURL
+		baseURL = api.EUBaseURL
 	case "us":
-		baseURL = USBaseURL
+		baseURL = api.USBaseURL
 	default:
 		return nil, fmt.Errorf("invalid region: %s. Valid regions are 'eu' and 'us'", region)
 	}

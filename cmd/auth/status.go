@@ -22,7 +22,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/matthieukhl/rgvr/internal"
+	"github.com/matthieukhl/rgvr/internal/client"
 	"github.com/spf13/cobra"
 )
 
@@ -34,7 +34,7 @@ var statusCmd = &cobra.Command{
 a test request to the API. If the API key is valid, it will return a success message.`,
 
 	RunE: func(cmd *cobra.Command, args []string) error {
-		client, err := internal.NewClient()
+		httpClient, err := client.NewClient()
 		if err != nil {
 			return fmt.Errorf("creating client: %w", err)
 		}
@@ -42,7 +42,7 @@ a test request to the API. If the API key is valid, it will return a success mes
 		// Make a test request to the API to check if the API key is valid
 		path := "/users?limit_count=1" // A simple endpoint that requires authentication as Ringover's public API does not have a dedicated endpoint for checking API key validity
 
-		resp, err := client.Get(path)
+		resp, err := httpClient.Get(path)
 		if err != nil {
 			return fmt.Errorf("making test request: %w", err)
 		}

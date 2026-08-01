@@ -24,7 +24,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/matthieukhl/rgvr/internal"
+	"github.com/matthieukhl/rgvr/internal/client"
 	"github.com/matthieukhl/rgvr/internal/flags"
 	"github.com/matthieukhl/rgvr/internal/formats"
 	"github.com/matthieukhl/rgvr/internal/models"
@@ -41,7 +41,7 @@ The total number of users is indicated in the list_count field.`,
 	RunE: func(cd *cobra.Command, args []string) error {
 		path := "/users"
 
-		client := cd.Context().Value(internal.ClientContextKey).(*internal.Client)
+		client := cd.Context().Value(client.ClientContextKey).(*client.Client)
 
 		start := time.Now()
 		resp, err := client.Get(path)
