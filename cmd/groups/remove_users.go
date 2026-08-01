@@ -29,13 +29,13 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// addUserCmd represents the addUser command
-var addUserCmd = &cobra.Command{
-	Use:   "add-users <group_id> <user_id1> [<user_id2> ...]",
-	Short: "Adds a user to a call group.",
-	Long: `Adds a user to a call group. Once added, the user will receive calls routed
-to this group according to the group's ring strategy (simultaneous, round-robin, etc.).
-The user must exist in the team. If the user is already a member of the group, the request has no effect.
+// removeUserCmd represents the removeUser command
+var removeUserCmd = &cobra.Command{
+	Use:   "remove-users <group_id> <user_id1> [user_id2 ...]",
+	Short: "Removes one or more users from a call group.",
+	Long: `Removes one or more users from a call group.
+Once removed, these users will no longer receive calls routed to this group.
+If a user ID is not a member of the group, it is silently ignored.
 
 Permission:
 
@@ -43,7 +43,8 @@ Permission:
 
 Monitoring:
 
-	Required. Group membership management is a supervisory operation. Returns 401 Unauthorized if Monitoringis OFF on your API key.`,
+	Required. Group membership management is a supervisory operation.
+	Returns 401 Unauthorized if Monitoring is OFF on your API key.`,
 	Args: cobra.MinimumNArgs(2),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		groupID := args[0]
@@ -59,7 +60,7 @@ Monitoring:
 		client := cmd.Context().Value(internal.ClientContextKey).(*internal.Client)
 
 		start := time.Now()
-		resp, err := client.Post(path, parsedUserIDs)
+		resp, err := client.Delete(path, parsedUserIDs)
 		if err != nil {
 			return err
 		}
@@ -71,7 +72,7 @@ Monitoring:
 			return fmt.Errorf("unexpected response from API: %s", resp.Status)
 		}
 
-		fmt.Printf("Successfully added user(s) %s to group %s\n", strings.Join(userIDs, ", "), groupID)
+		fmt.Printf("Successfully removed user(s) %s from group %s\n", strings.Join(userIDs, ", "), groupID)
 
 		if err := flags.IsVerbose(cmd, resp, duration); err != nil {
 			return err
@@ -82,5 +83,15 @@ Monitoring:
 }
 
 func init() {
-	groupsCmd.AddCommand(addUserCmd)
+	groupsCmd.AddCommand(removeUserCmd)
+
+	// Here you will define your flags and configuration settings.
+
+	// Cobra supports Persistent Flags which will work for this command
+	// and all subcommands, e.g.:
+	// removeUserCmd.PersistentFlags().String("foo", "", "A help for foo")
+
+	// Cobra supports local flags which will only run when this command
+	// is called directly, e.g.:
+	// removeUserCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
