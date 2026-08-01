@@ -55,6 +55,7 @@ Pagination:
 	Results are returned in a stable order (by group id), so the same offset always yields the same page.
 	To read every group, keep limit_count fixed and increase limit_offset by that amount on each request — 
 	this avoids the duplicates and gaps you would get from an unordered list.`,
+	Args: cobra.NoArgs,
 	PersistentPreRunE: func(cd *cobra.Command, args []string) error {
 		client, err := internal.NewClient()
 		if err != nil {
