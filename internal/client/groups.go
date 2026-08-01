@@ -51,3 +51,19 @@ func (c *Client) GetGroupByID(groupID string, params url.Values) (*models.Group,
 
 	return &group, reqInfo, nil
 }
+
+func (c *Client) PatchGroupAccess(groupID string) (*RequestInfo, error) {
+	path := fmt.Sprintf("/groups/%s/isjumper/toggle", groupID)
+
+	resp, reqInfo, err := c.Patch(path, nil)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != 200 {
+		return nil, fmt.Errorf("unexpected response from API: %s", resp.Status)
+	}
+
+	return reqInfo, nil
+}

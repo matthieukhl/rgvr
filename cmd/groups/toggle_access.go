@@ -48,19 +48,16 @@ Monitoring:
 	RunE: func(cmd *cobra.Command, args []string) error {
 		groupID := args[0]
 
-		path := fmt.Sprintf("/groups/%s/isjumper/toggle", groupID)
-
 		client := cmd.Context().Value(client.ClientContextKey).(*client.Client)
 
-		resp, reqInfo, err := client.Patch(path, nil)
+		reqInfo, err := client.PatchGroupAccess(groupID)
 		if err != nil {
 			return err
 		}
-		defer resp.Body.Close()
 
-		if resp.StatusCode != 200 {
-			return fmt.Errorf("unexpected response from API: %s", resp.Status)
-		}
+		group, _, err := client.GetGroupByID(groupID, nil)
+
+		fmt.Printf("Group %q (ID: %d): free access is now %t\n", group.Name, group.GroupID, group.IsJumper)
 
 		if err := flags.IsVerbose(cmd, reqInfo); err != nil {
 			return err
