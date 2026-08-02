@@ -32,9 +32,12 @@ import (
 var removeUserCmd = &cobra.Command{
 	Use:   "remove-users <group_id> <user_id1> [user_id2 ...]",
 	Short: "Removes one or more users from a call group.",
-	Long: `Removes one or more users from a call group.
-Once removed, these users will no longer receive calls routed to this group.
-If a user ID is not a member of the group, it is silently ignored.
+	Long: `
+Description:
+
+	Removes one or more users from a call group.
+	Once removed, these users will no longer receive calls routed to this group.
+	If a user ID is not a member of the group, it is silently ignored.
 
 Permission:
 

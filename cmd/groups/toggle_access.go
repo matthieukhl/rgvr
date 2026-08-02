@@ -30,11 +30,13 @@ import (
 var toggleAccessCmd = &cobra.Command{
 	Use:   "toggle-access <group_id>",
 	Short: "Toggles the 'is_jumper' flag on a specific group.",
-	Long: `Toggles the is_jumper flag on a specific group.
-When enabled (is_jumper = true), users can freely join
-and leave this group without requiring an administrator action.
-When disabled, group membership is managed exclusively by administrators.
-This corresponds to the "Free access" switch in the Ringover dashboard.
+	Long: `
+Description:
+
+	Toggles the is_jumper flag on a specific group.
+	When enabled (is_jumper = true), users can freely join and leave this group without requiring an administrator action.
+	When disabled, group membership is managed exclusively by administrators.
+	This corresponds to the "Free access" switch in the Ringover dashboard.
 
 Permission:
 

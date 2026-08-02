@@ -36,9 +36,12 @@ import (
 var groupsCmd = &cobra.Command{
 	Use:   "groups",
 	Short: "Retrieves call groups (ring groups) configured for your team.",
-	Long: `Retrieves call groups (ring groups) configured for your team.
-Groups define how incoming calls are distributed among a set of users (simultaneous ring, round-robin, etc.).
-Each group includes its member list, ring strategy, and configuration.
+	Long: `
+Description:
+	
+	Retrieves call groups (ring groups) configured for your team.
+	Groups define how incoming calls are distributed among a set of users (simultaneous ring, round-robin, etc.).
+	Each group includes its member list, ring strategy, and configuration.
 
 Permission:
 

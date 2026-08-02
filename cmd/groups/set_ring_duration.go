@@ -31,8 +31,12 @@ import (
 var setRingDurationCmd = &cobra.Command{
 	Use:   "set-ring-duration <group_id> <user_id> <ring_duration>",
 	Short: "Sets how long (in seconds) the phone rings for a specific user within a call group before the call is forwarded to the next member or dropped.",
-	Long: `Sets how long (in seconds) the phone rings for a specific user within a call group before the call is forwarded to the next member or dropped.
-This is a per-user, per-group setting — a user can have different ring durations in different groups. 'ring_duration' must be between 0 and 295 and a multiple of 5".
+	Long: `
+Description:
+
+	Sets how long (in seconds) the phone rings for a specific user within a call group before the call is forwarded to the next member or dropped.
+	This is a per-user, per-group setting — a user can have different ring durations in different groups.
+	'ring_duration' must be between 0 and 295 and a multiple of 5".
 
 Permission:
 

@@ -33,9 +33,12 @@ import (
 var getCmd = &cobra.Command{
 	Use:   "get <group_id>",
 	Short: "Retrieves detailed information about a specific call group.",
-	Long: `Retrieves detailed information about a specific call group, including its members,
-ring strategy, ring durations, and IVR assignments. Use this to inspect a group's configuration
-before making changes (e.g., adding/removing members, modifying ring duration).
+	Long: `
+Description:
+
+	Retrieves detailed information about a specific call group, including its members,
+	ring strategy, ring durations, and IVR assignments. Use this to inspect a group's configuration
+	before making changes (e.g., adding/removing members, modifying ring duration).
 
 Permission:
 

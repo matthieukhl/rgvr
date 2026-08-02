@@ -34,9 +34,12 @@ import (
 var addUserCmd = &cobra.Command{
 	Use:   "add-users <group_id> <user_id1> [<user_id2> ...]",
 	Short: "Adds a user to a call group.",
-	Long: `Adds a user to a call group. Once added, the user will receive calls routed
-to this group according to the group's ring strategy (simultaneous, round-robin, etc.).
-The user must exist in the team. If the user is already a member of the group, the request has no effect.
+	Long: `
+Description:
+
+	Adds a user to a call group. Once added, the user will receive calls routed
+	to this group according to the group's ring strategy (simultaneous, round-robin, etc.).
+	The user must exist in the team. If the user is already a member of the group, the request has no effect.
 
 Permission:
 
