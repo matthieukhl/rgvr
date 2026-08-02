@@ -91,6 +91,7 @@ Member pagination:
 
 func init() {
 	groupsCmd.AddCommand(getCmd)
+	groupsCmd.PersistentFlags().String("format", "json", "Choose the output's format: table / json")
 	getCmd.Flags().IntP("limit", "l", 0, "Maximum number of results to return per page. Default: server-defined.")
 	getCmd.Flags().Int("offset", 0, "Number of results to skip for pagination. Default: 0.")
 }

@@ -122,7 +122,7 @@ Pagination:
 
 func init() {
 	cmd.RootCmd.AddCommand(groupsCmd)
-	groupsCmd.PersistentFlags().String("format", "json", "Choose the output's format: table / json")
+	groupsCmd.Flags().String("format", "json", "Choose the output's format: table / json")
 
 	groupsCmd.Flags().IntP("limit", "l", 0, "Maximum number of results to return per page. Default: server-defined.")
 	groupsCmd.Flags().Int("offset", 0, "Number of results to skip for pagination. Default: 0.")
