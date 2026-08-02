@@ -21,6 +21,8 @@ package client
 import (
 	"encoding/json"
 	"fmt"
+	"io"
+	"net/http"
 	"net/url"
 
 	"github.com/matthieukhl/rgvr/internal/models"
@@ -66,4 +68,22 @@ func (c *Client) PatchGroupAccess(groupID string) (*RequestInfo, error) {
 	}
 
 	return reqInfo, nil
+}
+
+func (c *Client) PatchGroupRingduration(groupID string, userID string, ringDuration int) (*RequestInfo, error) {
+	path := fmt.Sprintf("/groups/%s/users/%s/ring_duration/%d", groupID, userID, ringDuration)
+
+	resp, reqInfo, err := c.Patch(path, nil)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		bodyBytes, _ := io.ReadAll(resp.Body)
+		return nil, fmt.Errorf("unexpected response from API (%s): %s", resp.Status, string(bodyBytes))
+	}
+
+	return reqInfo, nil
+
 }

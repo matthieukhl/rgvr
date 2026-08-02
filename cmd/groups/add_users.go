@@ -20,6 +20,8 @@ package groups
 
 import (
 	"fmt"
+	"io"
+	"net/http"
 	"strings"
 
 	"github.com/matthieukhl/rgvr/internal/client"
@@ -63,15 +65,16 @@ Monitoring:
 		}
 		defer resp.Body.Close()
 
-		if resp.StatusCode != 200 {
-			return fmt.Errorf("unexpected response from API: %s", resp.Status)
-		}
-
-		fmt.Printf("Successfully added user(s) %s to group %s\n", strings.Join(userIDs, ", "), groupID)
-
 		if err := flags.IsVerbose(cmd, reqInfo); err != nil {
 			return err
 		}
+
+		if resp.StatusCode != http.StatusOK {
+			bodyBytes, _ := io.ReadAll(resp.Body)
+			return fmt.Errorf("unexpected response from API (%s): %s", resp.Status, string(bodyBytes))
+		}
+
+		fmt.Printf("Successfully added user(s) %s to group %s\n", strings.Join(userIDs, ", "), groupID)
 
 		return nil
 	},
