@@ -5,12 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.4.0-beta] - 2026-08-02
 
 ### Added
 
 - Added `groups` command to list groups: retrieves call groups (ring groups) configured for your team.  
 - Added `groups get <group_id>` command: retrieves detailed information about a specific call group
+- Added `groups add-users` command: adds one or more user(s) to a specific group.
+- Added `groups remove-users` command: removes on or more user(s) froma a specific group.
+- Added `groups set-ring-duration` command: sets the ring duration for a specific user in a specific group.
+- Added `groups toggle-access` command: toggles the `is_jumper` flag on a specific group.
 
 ## [0.3.0-beta] - 2026-07-31
 
