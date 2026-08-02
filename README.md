@@ -87,7 +87,7 @@ See [Changelog](CHANGELOG.md).
 
 - 🟢 `/teams` endpoint
 - 🟡 `/users` endpoint (`GET` endpoints have been implemented)
-- 🟡 `/groups` endpoint
+- 🟢 `/groups` endpoint
 - 🔴 `/numbers` endpoint
 - 🔴 `/ivrs` endpoint
 - 🔴 `/tags` endpoint
