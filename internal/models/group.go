@@ -29,7 +29,7 @@ type Group struct {
 	TotalUsersCount int    `json:"total_users_count"`
 	Color           string `json:"color"`
 	IsJumper        bool   `json:"is_jumper"`
-	Users           []User `json:"users"`
+	Users           []User `json:"users,omitempty"`
 }
 
 func (g Group) TableHeader() []string {

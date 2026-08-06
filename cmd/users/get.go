@@ -60,6 +60,10 @@ Monitoring impact:
 		}
 		defer resp.Body.Close()
 
+		if err = flags.IsVerbose(cmd, reqInfo); err != nil {
+			return err
+		}
+
 		if resp.StatusCode != 200 {
 			return fmt.Errorf("unexpected response from API: %s", resp.Status)
 		}
@@ -84,11 +88,6 @@ Monitoring impact:
 				return err
 			}
 		}
-
-		if err = flags.IsVerbose(cmd, reqInfo); err != nil {
-			return err
-		}
-
 		return nil
 	},
 }
