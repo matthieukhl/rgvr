@@ -66,6 +66,9 @@ Member pagination:
 		httpClient := cmd.Context().Value(client.ClientContextKey).(*client.Client)
 
 		group, reqInfo, err := httpClient.GetGroupByID(groupID, params)
+		if err != nil {
+			return err
+		}
 
 		format, err := cmd.Flags().GetString("format")
 		if err != nil {
@@ -94,7 +97,6 @@ Member pagination:
 
 func init() {
 	groupsCmd.AddCommand(getCmd)
-	groupsCmd.PersistentFlags().String("format", "json", "Choose the output's format: table / json")
 	getCmd.Flags().IntP("limit", "l", 0, "Maximum number of results to return per page. Default: server-defined.")
 	getCmd.Flags().Int("offset", 0, "Number of results to skip for pagination. Default: 0.")
 }

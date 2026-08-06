@@ -26,17 +26,19 @@ import (
 // User represents a user in the Ringover system.
 // It implements the Tabler interface.
 type User struct {
-	UserID     int      `json:"user_id"`
-	TeamID     int      `json:"team_id"`
-	Initial    string   `json:"initial"`
-	Color      string   `json:"color"`
-	Firstname  string   `json:"firstname"`
-	Lastname   string   `json:"lastname"`
-	Company    string   `json:"company"`
-	Email      string   `json:"email"`
-	Picture    string   `json:"picture"`
-	ConcatName string   `json:"concat_name"`
-	Numbers    []Number `json:"numbers"`
+	UserID       int      `json:"user_id"`
+	TeamID       int      `json:"team_id"`
+	Initial      string   `json:"initial"`
+	Color        string   `json:"color"`
+	Firstname    string   `json:"firstname"`
+	Lastname     string   `json:"lastname"`
+	Company      string   `json:"company"`
+	Email        string   `json:"email"`
+	Picture      string   `json:"picture"`
+	ConcatName   string   `json:"concat_name"`
+	RingDuration int      `json:"ring_duration,omitempty"`
+	Order        int      `json:"order,omitempty"`
+	Numbers      []Number `json:"numbers,omitempty"`
 }
 
 func (u User) TableHeader() []string {
