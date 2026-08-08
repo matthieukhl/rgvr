@@ -18,6 +18,10 @@
 
 package models
 
+import (
+	"fmt"
+)
+
 type Number struct {
 	Number       int64  `json:"number"`
 	Label        string `json:"label"`
@@ -29,4 +33,32 @@ type Number struct {
 	IsSmsWrite   bool   `json:"is_sms_write"`
 	IsCallable   bool   `json:"is_callable"`
 	NumberFormat `json:"format"`
+}
+
+func (n Number) TableHeader() []string {
+	return []string{
+		"Number",
+		"Label",
+		"Type",
+		"User ID",
+		"IVR ID",
+		"Conference ID",
+		"Is SMS",
+		"Is SMS Write",
+		"Is Callable",
+	}
+}
+
+func (n Number) TableRow() []string {
+	return []string{
+		fmt.Sprintf("%d", n.Number),
+		n.Label,
+		n.Type,
+		fmt.Sprintf("%d", n.UserID),
+		fmt.Sprintf("%d", n.IvrID),
+		fmt.Sprintf("%d", n.ConferenceID),
+		fmt.Sprintf("%t", n.IsSms),
+		fmt.Sprintf("%t", n.IsSmsWrite),
+		fmt.Sprintf("%t", n.IsCallable),
+	}
 }
