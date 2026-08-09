@@ -21,6 +21,7 @@ package client
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 
 	"github.com/matthieukhl/rgvr/internal/models"
 )
@@ -38,18 +39,30 @@ func (c *Client) GetIVRs() (*models.ListResponse[models.IVR], *RequestInfo, erro
 		return nil, reqInfo, fmt.Errorf("unauthorized: invalid or missing API key, or missing 'IVRs read' permission")
 	}
 
-	if resp.StatusCode == 204 {
-		return nil, reqInfo, nil
+	// This has been commented out because although the documentation
+	// of Ringover's public API mentions a 204 in case no IVRs are found,
+	// in practice it is not the case. It returns a 200 with an empty body.
+	// I decided to keep the code commented for when this will be fixed and meanwhile,
+	// I'll simply check the body sent back by the API.
+	// if resp.StatusCode == 204 {
+	// 	return nil, reqInfo, nil
+	// }
+	// Temporary workaroud
+	bodyBytes, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, reqInfo, fmt.Errorf("reading response body: %w", err)
 	}
 
 	if resp.StatusCode != 200 {
 		return nil, reqInfo, fmt.Errorf("unexpected response from API: %s", resp.Status)
 	}
 
-	var ivrsResponse models.ListResponse[models.IVR]
+	if len(bodyBytes) == 0 {
+		return &models.ListResponse[models.IVR]{}, reqInfo, nil
+	}
 
-	err = json.NewDecoder(resp.Body).Decode(&ivrsResponse)
-	if err != nil {
+	var ivrsResponse models.ListResponse[models.IVR]
+	if err := json.Unmarshal(bodyBytes, &ivrsResponse); err != nil {
 		return nil, reqInfo, fmt.Errorf("decoding IVR information: %w", err)
 	}
 

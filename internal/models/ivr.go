@@ -27,7 +27,7 @@ type IVR struct {
 	IvrID     int        `json:"ivr_id"`
 	Name      string     `json:"name"`
 	Color     string     `json:"color"`
-	Numbers   []Number   `json:"numbers"`
+	Numbers   []Number   `json:"numbers,omitempty"` // omitempty tag necessary because of the difference of the IVR objects sent back by GET /ivrs and GET /ivrs/{ivr_id}
 	Scenarios []Scenario `json:"scenarios"`
 	IsOpen    bool       `json:"is_open"`
 }

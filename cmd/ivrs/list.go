@@ -19,6 +19,12 @@
 package ivrs
 
 import (
+	"fmt"
+	"os"
+
+	"github.com/matthieukhl/rgvr/internal/client"
+	"github.com/matthieukhl/rgvr/internal/flags"
+	"github.com/matthieukhl/rgvr/internal/formats"
 	"github.com/spf13/cobra"
 )
 
@@ -42,6 +48,39 @@ Monitoring impact:
 `,
 	Args: cobra.NoArgs,
 	RunE: func(cmd *cobra.Command, args []string) error {
+		httpClient := cmd.Context().Value(client.ClientContextKey).(*client.Client)
+
+		ivrs, reqInfo, err := httpClient.GetIVRs()
+		if err != nil {
+			return err
+		}
+
+		// Case no IVRs found
+		if ivrs == nil {
+			fmt.Println("No IVRs found")
+			return nil
+		}
+
+		format, err := cmd.Flags().GetString("format")
+		if err != nil {
+			return fmt.Errorf("retrieving format flag: %w", err)
+		}
+
+		if err := flags.IsVerbose(cmd, reqInfo); err != nil {
+			return fmt.Errorf("checking verbose flag: %w", err)
+		}
+
+		switch format {
+		case "table":
+			if err := formats.Table(os.Stdout, ivrs.List); err != nil {
+				return fmt.Errorf("printing table: %w", err)
+			}
+		default:
+			if err := formats.JSON(os.Stdout, ivrs.List); err != nil {
+				return fmt.Errorf("printing JSON: %w", err)
+			}
+		}
+
 		return nil
 	},
 }
