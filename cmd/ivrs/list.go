@@ -19,23 +19,30 @@
 package ivrs
 
 import (
-	"fmt"
-
 	"github.com/spf13/cobra"
 )
 
 // listCmd represents the list command
 var listCmd = &cobra.Command{
 	Use:   "list",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+	Short: "Retrieves all IVR (Interactive Voice Response) configurations for your team.",
+	Long: `Retrieves all IVR (Interactive Voice Response) configurations for your team.
+An IVR defines an automated call flow — menu options, routing rules, welcome messages,
+business hours, and queue behavior. Each IVR has one or more scenarios (call flow variants).
+The total count is in the list_count field.
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
-	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("list called")
+Permission:
+
+	IVRs Read required.
+
+Monitoring impact:
+	
+	OFF: Returns only IVRs assigned to you (IVRs using your numbers).
+	ON: Returns all IVRs in the team.
+`,
+	Args: cobra.NoArgs,
+	RunE: func(cmd *cobra.Command, args []string) error {
+		return nil
 	},
 }
 
