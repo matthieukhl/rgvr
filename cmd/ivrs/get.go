@@ -25,40 +25,40 @@ import (
 	"github.com/matthieukhl/rgvr/internal/client"
 	"github.com/matthieukhl/rgvr/internal/flags"
 	"github.com/matthieukhl/rgvr/internal/formats"
+	"github.com/matthieukhl/rgvr/internal/models"
 	"github.com/spf13/cobra"
 )
 
-// listCmd represents the list command
-var listCmd = &cobra.Command{
-	Use:   "list",
-	Short: "Retrieves all IVR (Interactive Voice Response) configurations for your team.",
-	Long: `Retrieves all IVR (Interactive Voice Response) configurations for your team.
-An IVR defines an automated call flow — menu options, routing rules, welcome messages,
-business hours, and queue behavior. Each IVR has one or more scenarios (call flow variants).
-The total count is in the list_count field.
+// getCmd represents the get command
+var getCmd = &cobra.Command{
+	Use:   "get <ivr_id>",
+	Short: "Retrieves detailed information about a specific IVR by its identifier.",
+	Long: `Retrieves detailed information about a specific IVR by its identifier,
+including its configuration, assigned numbers, scenarios, welcome message settings,
+business hours, and queue parameters. Use GET /ivrs to discover available IVR IDs.
 
 Permission:
 
 	IVRs Read required.
 
 Monitoring impact:
-	
-	OFF: Returns only IVRs assigned to you (IVRs using your numbers).
-	ON: Returns all IVRs in the team.
-`,
-	Args: cobra.NoArgs,
+
+	OFF: Returns the IVR only if it is assigned to you. Returns 404 otherwise.
+	ON: Returns any IVR in the team.`,
+	Args: cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
+		ivrID := args[0]
+
 		httpClient := cmd.Context().Value(client.ClientContextKey).(*client.Client)
 
-		ivrs, reqInfo, err := httpClient.GetIVRs()
+		ivr, reqInfo, err := httpClient.GetIVR(ivrID)
 		if err != nil {
 			return err
 		}
 
-		// Case no IVRs found
-		if ivrs == nil {
-			fmt.Println("No IVRs found")
-			return nil
+		// Sanity check
+		if ivr == nil {
+			return fmt.Errorf("no IVR found")
 		}
 
 		format, err := cmd.Flags().GetString("format")
@@ -72,11 +72,12 @@ Monitoring impact:
 
 		switch format {
 		case "table":
-			if err := formats.Table(os.Stdout, ivrs.List); err != nil {
+			if err := formats.Table(os.Stdout, []models.IVR{*ivr}); err != nil {
 				return fmt.Errorf("printing table: %w", err)
 			}
+
 		default:
-			if err := formats.JSON(os.Stdout, ivrs.List); err != nil {
+			if err := formats.JSON(os.Stdout, []models.IVR{*ivr}); err != nil {
 				return fmt.Errorf("printing JSON: %w", err)
 			}
 		}
@@ -86,6 +87,6 @@ Monitoring impact:
 }
 
 func init() {
-	ivrsCmd.AddCommand(listCmd)
-	listCmd.Flags().String("format", "json", "Choose the output's format: table / json")
+	ivrsCmd.AddCommand(getCmd)
+	getCmd.Flags().String("format", "json", "Choose the output's format: table / json")
 }
