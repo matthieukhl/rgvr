@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Added `numbers list` command to retrieve the team's phone numbers.
 - Added `numbers get <number>` command to retrieve details of a specific number.
+- Added `ivrs list` command to retrieve all IVR configurations for the user's team.
+
 
 ### Fixed
 
