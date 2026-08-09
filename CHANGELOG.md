@@ -9,14 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Added `numbers list` command to retrieve the team's phone numbers.
-- Added `numbers get <number>` command to retrieve details of a specific number.
-- Added `ivrs list` command to retrieve all IVR configurations for the user's team.
-
+- [Pull Request #3](https://github.com/matthieukhl/rgvr/pull/3): Added `numbers list` command to retrieve the team's phone numbers.
+- [Pull Request #13](https://github.com/matthieukhl/rgvr/pull/13): Added `numbers get <number>` command to retrieve details of a specific number.
+- [Pull Request #14](https://github.com/matthieukhl/rgvr/pull/14): Added `ivrs list` command to retrieve all IVR configurations for the user's team.
 
 ### Fixed
 
-- Fixed an issue in which the `groups` command returned a null `users` key.
+- [Pull Request #2](https://github.com/matthieukhl/rgvr/pull/2): Fixed an issue in which the `groups` command returned a null `users` key.
+- Fixed an issue that caused the `--format` flag to be available on each command as it was defined as a persistent flag on the root command.
 
 ## [0.4.0-beta] - 2026-08-02
 
