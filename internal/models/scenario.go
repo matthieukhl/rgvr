@@ -16,18 +16,37 @@
 	    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package main
+package models
 
-import (
-	"github.com/matthieukhl/rgvr/cmd"
-	_ "github.com/matthieukhl/rgvr/cmd/auth"
-	_ "github.com/matthieukhl/rgvr/cmd/groups"
-	_ "github.com/matthieukhl/rgvr/cmd/ivrs"
-	_ "github.com/matthieukhl/rgvr/cmd/numbers"
-	_ "github.com/matthieukhl/rgvr/cmd/teams"
-	_ "github.com/matthieukhl/rgvr/cmd/users"
-)
+import "fmt"
 
-func main() {
-	cmd.Execute()
+type Scenario struct {
+	Id        int    `json:"scenario_id"`
+	IvrId     int    `json:"ivr_id"`
+	Name      string `json:"name"`
+	Color     string `json:"color"`
+	Type      string `json:"scenario_type"`
+	IsDefault bool   `json:"is_default"`
+}
+
+func (s Scenario) TableHeader() []string {
+	return []string{
+		"Scenario ID",
+		"IVR ID",
+		"Name",
+		"Color",
+		"Scenario Type",
+		"Is Default",
+	}
+}
+
+func (s Scenario) TableRow() []string {
+	return []string{
+		fmt.Sprintf("%d", s.Id),
+		fmt.Sprintf("%d", s.IvrId),
+		s.Name,
+		s.Color,
+		s.Type,
+		fmt.Sprintf("%t", s.IsDefault),
+	}
 }
