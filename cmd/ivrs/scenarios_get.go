@@ -25,17 +25,18 @@ import (
 	"github.com/matthieukhl/rgvr/internal/client"
 	"github.com/matthieukhl/rgvr/internal/flags"
 	"github.com/matthieukhl/rgvr/internal/formats"
+	"github.com/matthieukhl/rgvr/internal/models"
 	"github.com/spf13/cobra"
 )
 
-// listScenariosCmd represents the list command for scenarios
-var listScenariosCmd = &cobra.Command{
-	Use:   "list <ivr_id>",
-	Short: "Retrieves all scenarios attached to a specific IVR.",
-	Long: `Retrieves all scenarios attached to a specific IVR.
-A scenario defines a complete call flow  menu options, routing, and what happens at each step.
-An IVR typically has one default scenario but can have multiple variants (e.g. business hours vs. after-hours).
-Total count is in list_count.
+// getScenarioCmd represents the get command
+var getScenarioCmd = &cobra.Command{
+	Use:   "get <ivr_id> <scenario_id>",
+	Short: "Retrieves detailed information about a specific scenario within an IVR.",
+	Long: `Retrieves detailed information about a specific scenario within an IVR.
+The response includes the full call flow definition — menu steps, routing rules,
+audio prompts, and queue configuration. Both ivrId and scenarioId must match for
+the scenario to be returned.
 
 Permission:
 
@@ -43,24 +44,19 @@ Permission:
 
 Monitoring impact:
 
-	OFF: returns only scenarios from IVRs assigned to you
-	ON: returns all scenarios for the specified IVR
+	OFF: Returns the scenario only if the parent IVR is assigned to you. Returns 404 otherwise.
+	ON: Returns any scenario for any IVR in the team.
 `,
-	Args: cobra.ExactArgs(1),
+	Args: cobra.ExactArgs(2),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		ivrID := args[0]
+		scenarioID := args[1]
 
 		httpClient := cmd.Context().Value(client.ClientContextKey).(*client.Client)
 
-		scenarios, reqInfo, err := httpClient.GetIVRScenarios(ivrID)
+		scenario, reqInfo, err := httpClient.GetIVRScenario(ivrID, scenarioID)
 		if err != nil {
 			return err
-		}
-
-		// Case no scenarios found
-		if scenarios == nil {
-			fmt.Println("No scenarios found")
-			return nil
 		}
 
 		format, err := cmd.Flags().GetString("format")
@@ -74,11 +70,12 @@ Monitoring impact:
 
 		switch format {
 		case "table":
-			if err := formats.Table(os.Stdout, scenarios.List); err != nil {
+			if err := formats.Table(os.Stdout, []models.Scenario{*scenario}); err != nil {
 				return fmt.Errorf("printing table: %w", err)
 			}
+
 		default:
-			if err := formats.JSON(os.Stdout, scenarios); err != nil {
+			if err := formats.JSON(os.Stdout, []models.Scenario{*scenario}); err != nil {
 				return fmt.Errorf("printing JSON: %w", err)
 			}
 		}
@@ -88,5 +85,5 @@ Monitoring impact:
 }
 
 func init() {
-	scenariosCmd.AddCommand(listScenariosCmd)
+	scenariosCmd.AddCommand(getScenarioCmd)
 }
