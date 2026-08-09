@@ -11,4 +11,5 @@ var scenariosCmd = &cobra.Command{
 
 func init() {
 	ivrsCmd.AddCommand(scenariosCmd)
+	scenariosCmd.PersistentFlags().String("format", "json", "Choose the output's format: table / json")
 }
