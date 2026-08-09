@@ -68,3 +68,38 @@ func (c *Client) GetIVRs() (*models.ListResponse[models.IVR], *RequestInfo, erro
 
 	return &ivrsResponse, reqInfo, nil
 }
+
+func (c *Client) GetIVR(ivrId string) (*models.IVR, *RequestInfo, error) {
+	path := fmt.Sprintf("/ivrs/%s", ivrId)
+
+	resp, reqInfo, err := c.Get(path)
+	if err != nil {
+		return nil, nil, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode == 400 {
+		return nil, nil, fmt.Errorf("invalid IVR identifier: %s", resp.Status)
+	}
+
+	if resp.StatusCode == 401 {
+		return nil, nil, fmt.Errorf("unauthorized: invalid or missing API token, or missing 'IVRs read' permission: %w", err)
+	}
+
+	if resp.StatusCode == 404 {
+		return nil, nil, fmt.Errorf("IVR not found, or not accessible with current monitoring level: %s", resp.Status)
+	}
+
+	if resp.StatusCode != 200 {
+		return nil, nil, fmt.Errorf("unexpected response from API: %s", resp.Status)
+	}
+
+	var ivr *models.IVR
+
+	err = json.NewDecoder(resp.Body).Decode(&ivr)
+	if err != nil {
+		return nil, nil, fmt.Errorf("decoding number information: %w", err)
+	}
+
+	return ivr, reqInfo, nil
+}

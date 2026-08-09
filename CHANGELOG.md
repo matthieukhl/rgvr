@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [Pull Request #3](https://github.com/matthieukhl/rgvr/pull/3): Added `numbers list` command to retrieve the team's phone numbers.
 - [Pull Request #13](https://github.com/matthieukhl/rgvr/pull/13): Added `numbers get <number>` command to retrieve details of a specific number.
 - [Pull Request #14](https://github.com/matthieukhl/rgvr/pull/14): Added `ivrs list` command to retrieve all IVR configurations for the user's team.
+- Added `ivrs get <ivr_id>` command that allow user to retrieve detailed information about a specific ivr. 
 
 ### Fixed
 
