@@ -22,6 +22,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"net/http"
 
 	"github.com/matthieukhl/rgvr/internal/models"
 )
@@ -149,4 +150,39 @@ func (c *Client) GetIVRScenarios(ivrId string) (*models.ListResponse[models.Scen
 	}
 
 	return &scenariosResponse, reqInfo, nil
+}
+
+func (c *Client) GetIVRScenario(ivrID, scenarioID string) (*models.Scenario, *RequestInfo, error) {
+	path := fmt.Sprintf("/ivrs/%s/scenarios/%s", ivrID, scenarioID)
+
+	resp, reqInfo, err := c.Get(path)
+	if err != nil {
+		return nil, nil, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode == http.StatusBadRequest {
+		return nil, nil, fmt.Errorf("invalid IVR or scenario identifier: %s", resp.Status)
+	}
+
+	if resp.StatusCode == http.StatusUnauthorized {
+		return nil, nil, fmt.Errorf("unauthorized: invalid or missing API token, or missing 'IVRs Read' permission: %s", resp.Status)
+	}
+
+	if resp.StatusCode == http.StatusNotFound {
+		return nil, nil, fmt.Errorf("Scenario not found, or not accessible with current monitoring level.")
+	}
+
+	if resp.StatusCode != http.StatusOK {
+		return nil, nil, fmt.Errorf("unexpected response from API: %w", err)
+	}
+
+	var scenario *models.Scenario
+
+	err = json.NewDecoder(resp.Body).Decode(&scenario)
+	if err != nil {
+		return nil, nil, fmt.Errorf("deocding scenario information: %w", err)
+	}
+
+	return scenario, reqInfo, nil
 }
