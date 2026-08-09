@@ -12,7 +12,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [Pull Request #3](https://github.com/matthieukhl/rgvr/pull/3): Added `numbers list` command to retrieve the team's phone numbers.
 - [Pull Request #13](https://github.com/matthieukhl/rgvr/pull/13): Added `numbers get <number>` command to retrieve details of a specific number.
 - [Pull Request #14](https://github.com/matthieukhl/rgvr/pull/14): Added `ivrs list` command to retrieve all IVR configurations for the user's team.
-- Added `ivrs get <ivr_id>` command that allow user to retrieve detailed information about a specific ivr. 
+- [Pull Request *15](https://github.com/matthieukhl/rgvr/pull/15): Added `ivrs get <ivr_id>` command that allows user to retrieve detailed information about a specific ivr.
+- [Pull Request *16](https://github.com/matthieukhl/rgvr/pull/16): Added `ivrs scenarios list <ivr_id>` command that allows user to list the scenarios for a specific IVR.
+- Added `ivrs scenarios get <ivr_id> <scenario_id>` command that allows user to get a specific scneario of a specific IVR.
 
 ### Fixed
 
