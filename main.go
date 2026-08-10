@@ -24,6 +24,7 @@ import (
 	_ "github.com/matthieukhl/rgvr/cmd/groups"
 	_ "github.com/matthieukhl/rgvr/cmd/ivrs"
 	_ "github.com/matthieukhl/rgvr/cmd/numbers"
+	_ "github.com/matthieukhl/rgvr/cmd/scenarios"
 	_ "github.com/matthieukhl/rgvr/cmd/teams"
 	_ "github.com/matthieukhl/rgvr/cmd/users"
 )
