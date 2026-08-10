@@ -35,6 +35,12 @@ type Number struct {
 	NumberFormat `json:"format"`
 }
 
+type NumberAssignment struct {
+	UserID       int64 `json:"user_id,omitempty"`
+	IvrID        int64 `json:"ivr_id,omitempty"`
+	ConferenceID int64 `json:"conference_id,omitempty"`
+}
+
 func (n Number) TableHeader() []string {
 	return []string{
 		"Number",

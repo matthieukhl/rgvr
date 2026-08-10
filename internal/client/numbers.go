@@ -3,6 +3,7 @@ package client
 import (
 	"encoding/json"
 	"fmt"
+	"net/http"
 
 	"github.com/matthieukhl/rgvr/internal/models"
 )
@@ -64,4 +65,37 @@ func (c *Client) GetNumber(number string) (*models.Number, *RequestInfo, error) 
 	}
 
 	return &numberResponse, reqInfo, nil
+}
+
+func (c *Client) AssignNumber(number string, target *models.NumberAssignment) (*RequestInfo, error) {
+	path := fmt.Sprintf("/numbers/%s", number)
+
+	body, err := json.Marshal(target)
+	if err != nil {
+		return nil, fmt.Errorf("encoding request body: %w", err)
+	}
+
+	resp, reqInfo, err := c.Patch(path, body)
+	if err != nil {
+		return reqInfo, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode == http.StatusBadRequest {
+		return reqInfo, fmt.Errorf("%s: invalid request - check number format and assignment target", resp.Status)
+	}
+
+	if resp.StatusCode == http.StatusUnauthorized {
+		return reqInfo, fmt.Errorf("%s: invalid API key or missing 'Numbers Read' permission", resp.Status)
+	}
+
+	if resp.StatusCode == http.StatusNotFound {
+		return reqInfo, fmt.Errorf("%s: number not found", resp.Status)
+	}
+
+	if resp.StatusCode != http.StatusOK {
+		return reqInfo, fmt.Errorf("unexpected response from API: %w", err)
+	}
+
+	return reqInfo, nil
 }
