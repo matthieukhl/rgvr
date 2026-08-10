@@ -43,6 +43,7 @@ Monitoring impact:
 
 	OFF: Limited assignment capabilities — restricted to your own numbers.
 	ON: Full assignment capabilities across the entire team.`,
+	Args: cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		cmd.MarkFlagsMutuallyExclusive("user", "ivr", "conference")
 		number := args[0]
