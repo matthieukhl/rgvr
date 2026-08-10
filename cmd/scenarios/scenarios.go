@@ -16,19 +16,37 @@
 	    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package main
+package scenarios
 
 import (
+	"context"
+	"fmt"
+
 	"github.com/matthieukhl/rgvr/cmd"
-	_ "github.com/matthieukhl/rgvr/cmd/auth"
-	_ "github.com/matthieukhl/rgvr/cmd/groups"
-	_ "github.com/matthieukhl/rgvr/cmd/ivrs"
-	_ "github.com/matthieukhl/rgvr/cmd/numbers"
-	_ "github.com/matthieukhl/rgvr/cmd/scenarios"
-	_ "github.com/matthieukhl/rgvr/cmd/teams"
-	_ "github.com/matthieukhl/rgvr/cmd/users"
+	"github.com/matthieukhl/rgvr/internal/client"
+	"github.com/spf13/cobra"
 )
 
-func main() {
-	cmd.Execute()
+// scenariosCmd represents the scenarios command
+var scenariosCmd = &cobra.Command{
+	Use:   "scenarios",
+	Short: "List scenarios and get details of a scenario.",
+	Long: `List all your scenarios across your IVRs or fetch details
+of a specifc scenario.`,
+	Args: cobra.NoArgs,
+	PersistentPreRunE: func(cd *cobra.Command, args []string) error {
+		httpClient, err := client.NewClient()
+		if err != nil {
+			return fmt.Errorf("creating client: %w", err)
+		}
+
+		ctx := context.WithValue(cd.Context(), client.ClientContextKey, httpClient)
+		cd.SetContext(ctx)
+		return nil
+	},
+}
+
+func init() {
+	cmd.RootCmd.AddCommand(scenariosCmd)
+	scenariosCmd.PersistentFlags().String("format", "json", "Choose the output's format: table / json")
 }
