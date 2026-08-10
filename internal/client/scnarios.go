@@ -69,3 +69,38 @@ func (c *Client) GetScenarios() (*models.ListResponse[models.Scenario], *Request
 
 	return &scenariosResponse, reqInfo, nil
 }
+
+func (c *Client) GetScenario(scenarioID string) (*models.Scenario, *RequestInfo, error) {
+	path := fmt.Sprintf("/scenarios/%s", scenarioID)
+
+	resp, reqInfo, err := c.Get(path)
+	if err != nil {
+		return nil, reqInfo, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode == http.StatusBadRequest {
+		return nil, reqInfo, fmt.Errorf("%s: invalid scenario ID format", resp.Status)
+	}
+
+	if resp.StatusCode == http.StatusUnauthorized {
+		return nil, reqInfo, fmt.Errorf("%s: invalid API key or missing 'IVRs Read' permission", resp.Status)
+	}
+
+	if resp.StatusCode == http.StatusNotFound {
+		return nil, reqInfo, fmt.Errorf("%s: scenario not found or not accessible with current monitoring level", resp.Status)
+	}
+
+	if resp.StatusCode != http.StatusOK {
+		return nil, reqInfo, fmt.Errorf("unexpected response from API: %s", resp.Status)
+	}
+
+	var scenario *models.Scenario
+
+	err = json.NewDecoder(resp.Body).Decode(&scenario)
+	if err != nil {
+		return nil, reqInfo, fmt.Errorf("decoding scenario information: %w", err)
+	}
+
+	return scenario, reqInfo, nil
+}
