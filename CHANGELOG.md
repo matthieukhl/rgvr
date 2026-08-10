@@ -12,9 +12,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [Pull Request #3](https://github.com/matthieukhl/rgvr/pull/3): Added `numbers list` command to retrieve the team's phone numbers.
 - [Pull Request #13](https://github.com/matthieukhl/rgvr/pull/13): Added `numbers get <number>` command to retrieve details of a specific number.
 - [Pull Request #14](https://github.com/matthieukhl/rgvr/pull/14): Added `ivrs list` command to retrieve all IVR configurations for the user's team.
-- [Pull Request *15](https://github.com/matthieukhl/rgvr/pull/15): Added `ivrs get <ivr_id>` command that allows user to retrieve detailed information about a specific ivr.
-- [Pull Request *16](https://github.com/matthieukhl/rgvr/pull/16): Added `ivrs scenarios list <ivr_id>` command that allows user to list the scenarios for a specific IVR.
-- Added `ivrs scenarios get <ivr_id> <scenario_id>` command that allows user to get a specific scneario of a specific IVR.
+- [Pull Request #15](https://github.com/matthieukhl/rgvr/pull/15): Added `ivrs get <ivr_id>` command that allows user to retrieve detailed information about a specific ivr.
+- [Pull Request #16](https://github.com/matthieukhl/rgvr/pull/16): Added `ivrs scenarios list <ivr_id>` command that allows user to list the scenarios for a specific IVR.
+- [Pull Request #17](https://github.com/matthieukhl/rgvr/pull/17): Added `ivrs scenarios get <ivr_id> <scenario_id>` command that allows user to get a specific scneario of a specific IVR.
+- [Pull Request #18](https://github.com/matthieukhl/rgvr/pull/18): Added `scenarios list` command that retrieves all scenarios across all IVRs in a single command.
+- [Pull Request #19](https://github.com/matthieukhl/rgvr/pull/19): Added `scenarios get <scenario_id>` that retrieves a specific scenario.
+- Added `numbers assign <number>` command that assigns a number to either a user, an IVR or a conference.
 
 ### Fixed
 
