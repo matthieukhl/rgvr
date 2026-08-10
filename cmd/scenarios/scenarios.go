@@ -1,0 +1,38 @@
+/*
+		rgvr - A CLI to interact with Ringover's public API.
+	    Copyright (C) 2026  Matthieu Khairallah <matthieu.khairallah@proton.me>
+
+	    This program is free software: you can redistribute it and/or modify
+	    it under the terms of the GNU Affero General Public License as published by
+	    the Free Software Foundation, either version 3 of the License, or
+	    (at your option) any later version.
+
+	    This program is distributed in the hope that it will be useful,
+	    but WITHOUT ANY WARRANTY; without even the implied warranty of
+	    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	    GNU Affero General Public License for more details.
+
+	    You should have received a copy of the GNU Affero General Public License
+	    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
+package scenarios
+
+import (
+	"github.com/matthieukhl/rgvr/cmd"
+	"github.com/spf13/cobra"
+)
+
+// scenariosCmd represents the scenarios command
+var scenariosCmd = &cobra.Command{
+	Use:   "scenarios",
+	Short: "List scenarios and get details of a scenario.",
+	Long: `List all your scenarios across your IVRs or fetch details
+of a specifc scenario.`,
+	Args: cobra.NoArgs,
+}
+
+func init() {
+	cmd.RootCmd.AddCommand(scenariosCmd)
+	scenariosCmd.PersistentFlags().String("format", "json", "Choose the output's format: table / json")
+}
