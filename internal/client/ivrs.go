@@ -181,8 +181,43 @@ func (c *Client) GetIVRScenario(ivrID, scenarioID string) (*models.Scenario, *Re
 
 	err = json.NewDecoder(resp.Body).Decode(&scenario)
 	if err != nil {
-		return nil, nil, fmt.Errorf("deocding scenario information: %w", err)
+		return nil, reqInfo, fmt.Errorf("deocding scenario information: %w", err)
 	}
 
 	return scenario, reqInfo, nil
+}
+
+func (c *Client) PostCallback(ivrID string, ivrCallback models.IVRCallback) (*models.IVRCallbackResponse, *RequestInfo, error) {
+	path := fmt.Sprintf("/ivrs/%s/callback", ivrID)
+
+	body, err := json.Marshal(ivrCallback)
+	if err != nil {
+		return nil, nil, fmt.Errorf("encoding request body: %w", err)
+	}
+
+	resp, reqInfo, err := c.Post(path, body)
+	if err != nil {
+		return nil, reqInfo, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode == http.StatusUnauthorized {
+		return nil, reqInfo, fmt.Errorf("%s: missing or invalid token, or insufficient 'Calls write' permission")
+	}
+
+	if resp.StatusCode == http.StatusNotFound {
+		return nil, reqInfo, fmt.Errorf("%s: the specified IVR does not exist")
+	}
+
+	if resp.StatusCode != http.StatusOK {
+		return nil, reqInfo, fmt.Errorf("unexpected response from API: %w", err)
+	}
+
+	var ivrCallbackResp *models.IVRCallbackResponse
+
+	if err := json.NewDecoder(resp.Body).Decode(&ivrCallbackResp); err != nil {
+		return nil, reqInfo, fmt.Errorf("deocding scenario information: %w", err)
+	}
+
+	return ivrCallbackResp, reqInfo, nil
 }

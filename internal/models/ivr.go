@@ -32,6 +32,28 @@ type IVR struct {
 	IsOpen    bool       `json:"is_open"`
 }
 
+type SalesforceIntegration struct {
+	Object   string `json:"object"`
+	ObjectID string `json:"object_id"`
+}
+
+type Integrations struct {
+	Salesforce *SalesforceIntegration `json:"salesforce,omitempty"`
+}
+
+type IVRCallback struct {
+	FromNumber   int64         `json:"from_number"`
+	Clir         bool          `json:"clir"`
+	ToNumber     int64         `json:"to_number"`
+	Timeout      int64         `json:"timeout"`
+	Integrations *Integrations `json:"integrations,omitempty"`
+}
+
+type IVRCallbackResponse struct {
+	CallID    uint64 `json:"call_id"`
+	ChannelID uint64 `json:"channel_id"`
+}
+
 func (i IVR) TableHeader() []string {
 	return []string{
 		"Ivr ID",
