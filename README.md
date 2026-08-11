@@ -89,7 +89,7 @@ See [Changelog](CHANGELOG.md).
 - 🟡 `/users` endpoint (`GET` endpoints have been implemented)
 - 🟢 `/groups` endpoint
 - 🟢 `/numbers` endpoint
-- 🟡 `/ivrs` endpoint
+- 🟢 `/ivrs` endpoint
 - 🔴 `/tags` endpoint
 - 🔴 `/conferences` endpoint
 - 🔴 `/calls` endpoint

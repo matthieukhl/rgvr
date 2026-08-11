@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [v0.5.0-beta] 2026-08-11
 
 ### Added
 
@@ -17,7 +17,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [Pull Request #17](https://github.com/matthieukhl/rgvr/pull/17): Added `ivrs scenarios get <ivr_id> <scenario_id>` command that allows user to get a specific scneario of a specific IVR.
 - [Pull Request #18](https://github.com/matthieukhl/rgvr/pull/18): Added `scenarios list` command that retrieves all scenarios across all IVRs in a single command.
 - [Pull Request #19](https://github.com/matthieukhl/rgvr/pull/19): Added `scenarios get <scenario_id>` that retrieves a specific scenario.
-- Added `numbers assign <number>` command that assigns a number to either a user, an IVR or a conference.
+- [Pull Request #20](https://github.com/matthieukhl/rgvr/pull/20): Added `numbers assign <number>` command that assigns a number to either a user, an IVR or a conference.
+- [Pull Request #21](https://github.com/matthieukhl/rgvr/pull/21)Added `ivrs callback <ivr_id> --from <from_number> --to <to_number>` command that allows user to trigger a callback through a specific IVR (Interactive Voice Response) queue.
 
 ### Fixed
 
