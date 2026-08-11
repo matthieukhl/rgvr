@@ -32,17 +32,21 @@ type IVR struct {
 	IsOpen    bool       `json:"is_open"`
 }
 
+type SalesforceIntegration struct {
+	Object   string `json:"object"`
+	ObjectID string `json:"object_id"`
+}
+
+type Integrations struct {
+	Salesforce *SalesforceIntegration `json:"salesforce,omitempty"`
+}
+
 type IVRCallback struct {
-	FromNumber   string `json:"from_number"`
-	Clir         bool   `json:"clir"`
-	ToNumber     string `json:"to_number"`
-	Timeout      int64  `json:"time"`
-	Integrations struct {
-		Salesforce struct {
-			Object   string `json:"object,omitempty"`
-			ObjectID string `json:"object_id,omitempty"`
-		} `json:"salesforce"`
-	} `json:"integrations"`
+	FromNumber   int64         `json:"from_number"`
+	Clir         bool          `json:"clir"`
+	ToNumber     int64         `json:"to_number"`
+	Timeout      int64         `json:"timeout"`
+	Integrations *Integrations `json:"integrations,omitempty"`
 }
 
 type IVRCallbackResponse struct {
