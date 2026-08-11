@@ -45,6 +45,11 @@ type IVRCallback struct {
 	} `json:"integrations"`
 }
 
+type IVRCallbackResponse struct {
+	CallID    uint64 `json:"channel_id"`
+	ChannelID uint64 `json:"channel_id"`
+}
+
 func (i IVR) TableHeader() []string {
 	return []string{
 		"Ivr ID",
