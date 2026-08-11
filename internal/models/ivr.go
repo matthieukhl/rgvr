@@ -46,7 +46,7 @@ type IVRCallback struct {
 }
 
 type IVRCallbackResponse struct {
-	CallID    uint64 `json:"channel_id"`
+	CallID    uint64 `json:"call_id"`
 	ChannelID uint64 `json:"channel_id"`
 }
 
