@@ -36,7 +36,7 @@ type IVRCallback struct {
 	FromNumber   string `json:"from_number"`
 	Clir         bool   `json:"clir"`
 	ToNumber     string `json:"to_number"`
-	Time         int64  `json:"time"`
+	Timeout      int64  `json:"time"`
 	Integrations struct {
 		Salesforce struct {
 			Object   string `json:"object,omitempty"`
