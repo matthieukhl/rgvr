@@ -202,11 +202,11 @@ func (c *Client) PostCallback(ivrID string, ivrCallback models.IVRCallback) (*mo
 	defer resp.Body.Close()
 
 	if resp.StatusCode == http.StatusUnauthorized {
-		return nil, reqInfo, fmt.Errorf("%s: missing or invalid token, or insufficient 'Calls write' permission")
+		return nil, reqInfo, fmt.Errorf("%s: missing or invalid token, or insufficient 'Calls write' permission", resp.Status)
 	}
 
 	if resp.StatusCode == http.StatusNotFound {
-		return nil, reqInfo, fmt.Errorf("%s: the specified IVR does not exist")
+		return nil, reqInfo, fmt.Errorf("%s: the specified IVR does not exist", resp.Status)
 	}
 
 	if resp.StatusCode != http.StatusOK {
