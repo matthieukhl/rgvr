@@ -19,6 +19,12 @@
 package tags
 
 import (
+	"fmt"
+	"os"
+
+	"github.com/matthieukhl/rgvr/internal/client"
+	"github.com/matthieukhl/rgvr/internal/flags"
+	"github.com/matthieukhl/rgvr/internal/formats"
 	"github.com/spf13/cobra"
 )
 
@@ -40,20 +46,43 @@ Monitoring:
 
 `,
 	RunE: func(cmd *cobra.Command, args []string) error {
+		httpClient := cmd.Context().Value(client.ClientContextKey).(*client.Client)
+
+		tags, reqInfo, err := httpClient.GetTags()
+		if err != nil {
+			return err
+		}
+
+		if tags.ListCount == 0 {
+			fmt.Println("No tags found.")
+			return nil
+		}
+
+		format, err := cmd.Flags().GetString("format")
+		if err != nil {
+			return fmt.Errorf("retrieving format flag: %w", err)
+		}
+
+		if err := flags.IsVerbose(cmd, reqInfo); err != nil {
+			return fmt.Errorf("checking verbose flag: %w", err)
+		}
+
+		switch format {
+		case "table":
+			if err := formats.Table(os.Stdout, tags.List); err != nil {
+				return fmt.Errorf("printing table: %w", err)
+			}
+		default:
+			if err := formats.JSON(os.Stdout, tags.List); err != nil {
+				return fmt.Errorf("printing JSON: %w", err)
+			}
+		}
+
 		return nil
 	},
 }
 
 func init() {
 	tagsCmd.AddCommand(listCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// listCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// listCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	listCmd.Flags().String("format", "json", "Choose the output's format: table / json")
 }
