@@ -37,7 +37,7 @@ func (c *Client) GetTags() (*models.ListResponse[models.Tag], *RequestInfo, erro
 	defer resp.Body.Close()
 
 	if resp.StatusCode == http.StatusUnauthorized {
-		return nil, reqInfo, fmt.Errorf("%s: invalid or missing API token, or missing 'IVRs read' permission.", resp.Status)
+		return nil, reqInfo, fmt.Errorf("%s: invalid or missing API token, or missing 'IVRs read' permission", resp.Status)
 	}
 
 	// This has been commented out because although the documentation
@@ -60,8 +60,42 @@ func (c *Client) GetTags() (*models.ListResponse[models.Tag], *RequestInfo, erro
 
 	var tagsResponse models.ListResponse[models.Tag]
 	if err := json.Unmarshal(bodyBytes, &tagsResponse); err != nil {
-		return nil, reqInfo, fmt.Errorf("decoding IVR information: %w", err)
+		return nil, reqInfo, fmt.Errorf("decoding tag information: %w", err)
 	}
 
 	return &tagsResponse, reqInfo, nil
+}
+
+func (c *Client) GetTag(tagID string) (*models.Tag, *RequestInfo, error) {
+	path := fmt.Sprintf("/tags/%s", tagID)
+
+	resp, reqInfo, err := c.Get(path)
+	if err != nil {
+		return nil, nil, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode == http.StatusBadRequest {
+		return nil, reqInfo, fmt.Errorf("%s: invalid tag identifier", resp.Status)
+	}
+
+	if resp.StatusCode == http.StatusUnauthorized {
+		return nil, reqInfo, fmt.Errorf("%s: invalid or missing API token, or missing 'IVRs Read' permission", resp.Status)
+	}
+
+	if resp.StatusCode == http.StatusNotFound {
+		return nil, reqInfo, nil // We'll handle this gratefully when called in cmd/tags/get.go
+	}
+
+	if resp.StatusCode != http.StatusOK {
+		return nil, reqInfo, fmt.Errorf("unexpected response from API: %w", err)
+	}
+
+	var tag *models.Tag
+
+	if err := json.NewDecoder(resp.Body).Decode(&tag); err != nil {
+		return nil, reqInfo, fmt.Errorf("decoding tag information: %w", err)
+	}
+
+	return tag, reqInfo, nil
 }
