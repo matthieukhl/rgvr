@@ -16,20 +16,37 @@
 	    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package main
+package models
 
 import (
-	"github.com/matthieukhl/rgvr/cmd"
-	_ "github.com/matthieukhl/rgvr/cmd/auth"
-	_ "github.com/matthieukhl/rgvr/cmd/groups"
-	_ "github.com/matthieukhl/rgvr/cmd/ivrs"
-	_ "github.com/matthieukhl/rgvr/cmd/numbers"
-	_ "github.com/matthieukhl/rgvr/cmd/scenarios"
-	_ "github.com/matthieukhl/rgvr/cmd/tags"
-	_ "github.com/matthieukhl/rgvr/cmd/teams"
-	_ "github.com/matthieukhl/rgvr/cmd/users"
+	"fmt"
+	"time"
 )
 
-func main() {
-	cmd.Execute()
+type Tag struct {
+	TagID        int       `json:"tag_id"`
+	Name         string    `json:"name"`
+	Color        string    `json:"color"`
+	Description  string    `json:"description"`
+	CreationDate time.Time `json:"creation_date"`
+}
+
+func (t Tag) TableHeader() []string {
+	return []string{
+		"Tag ID",
+		"Name",
+		"Color",
+		"Description",
+		"Creation Date",
+	}
+}
+
+func (t Tag) TableRow() []string {
+	return []string{
+		fmt.Sprintf("%d", t.TagID),
+		t.Name,
+		t.Color,
+		t.Description,
+		t.CreationDate.String(),
+	}
 }
