@@ -16,6 +16,8 @@
 	    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+// Package tags implements commands for managing
+// Ringover tags via the rgvr CLI.
 package tags
 
 import (
