@@ -16,6 +16,9 @@
 	    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+// client package manages the HTTP client for interacting with the Ringover API.
+// It provides functionality to create a new client instance, configure it with
+// the appropriate API key and region, and handle HTTP requests and responses for each endpoint.
 package client
 
 import (
