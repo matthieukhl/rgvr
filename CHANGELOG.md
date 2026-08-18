@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v0.6.0-beta] 2026-08-18
+
+### Added
+
+- [Pull Request #36](https://github.com/matthieukhl/rgvr/pull/36): Added `tags list` command to retrieve all call tags.
+- [Pull Request #37](https://github.com/matthieukhl/rgvr/pull/37): Added `tags get` command to retrieve a specific call tag.
+- [Pull Request #38](https://github.com/matthieukhl/rgvr/pull/38): Added `tags create` command to create a new call tag.
+
 ## [v0.5.0-beta] 2026-08-11
 
 ### Added

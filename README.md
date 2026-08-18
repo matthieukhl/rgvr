@@ -90,7 +90,7 @@ See [Changelog](CHANGELOG.md).
 - 🟢 `/groups` endpoint
 - 🟢 `/numbers` endpoint
 - 🟢 `/ivrs` endpoint
-- 🔴 `/tags` endpoint
+- 🟢 `/tags` endpoint
 - 🔴 `/conferences` endpoint
 - 🔴 `/calls` endpoint
 - 🔴 `/campaigns` endpoint
