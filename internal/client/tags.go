@@ -99,3 +99,28 @@ func (c *Client) GetTag(tagID string) (*models.Tag, *RequestInfo, error) {
 
 	return tag, reqInfo, nil
 }
+
+func (c *Client) CreateTag(tag *models.Tag) (*RequestInfo, error) {
+	path := "/tags"
+
+	bodyBytes, err := json.Marshal(tag)
+	if err != nil {
+		return nil, fmt.Errorf("encoding tag information: %w", err)
+	}
+
+	resp, reqInfo, err := c.Post(path, bodyBytes)
+	if err != nil {
+		return reqInfo, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode == http.StatusUnauthorized {
+		return reqInfo, fmt.Errorf("%s: invalid or missing API token, or missing 'IVRs Write' permission", resp.Status)
+	}
+
+	if resp.StatusCode != http.StatusOK {
+		return reqInfo, fmt.Errorf("unexpected response from API: %w", err)
+	}
+
+	return reqInfo, nil
+}
