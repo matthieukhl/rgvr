@@ -20,6 +20,7 @@ package models
 
 import (
 	"fmt"
+	"strings"
 	"time"
 )
 
@@ -39,6 +40,10 @@ const (
 	ColorGrey   TagColor = "E0E0E0"
 )
 
+func (tc TagColor) String() string {
+	return string(tc)
+}
+
 var colorNames = map[string]TagColor{
 	"yellow": ColorYellow,
 	"orange": ColorOrange,
@@ -49,6 +54,16 @@ var colorNames = map[string]TagColor{
 	"blue":   ColorBlue,
 	"green":  ColorGreen,
 	"grey":   ColorGrey,
+}
+
+func ParseTagColor(colorName string) (TagColor, error) {
+	normalized := strings.ToLower(colorName)
+
+	if color, exists := colorNames[normalized]; exists {
+		return color, nil
+	}
+
+	return "", fmt.Errorf("invalid tag color: %s", colorName)
 }
 
 type Tag struct {
@@ -73,7 +88,7 @@ func (t Tag) TableRow() []string {
 	return []string{
 		fmt.Sprintf("%d", t.TagID),
 		t.Name,
-		t.Color,
+		t.Color.String(),
 		t.Description,
 		t.CreationDate.String(),
 	}
