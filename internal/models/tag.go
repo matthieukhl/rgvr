@@ -57,6 +57,9 @@ var colorNames = map[string]TagColor{
 }
 
 func ParseTagColor(colorName string) (TagColor, error) {
+	if colorName == "" {
+		return "", fmt.Errorf("'color' flags cannot be empty. Must be one of the following options: yellow, brown, pink, red, blue, green, grey, purple or orange.")
+	}
 	normalized := strings.ToLower(colorName)
 
 	if color, exists := colorNames[normalized]; exists {
