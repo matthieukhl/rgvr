@@ -23,10 +23,38 @@ import (
 	"time"
 )
 
+// TagColor represents a valid Ringover tag color, identified by its hex code.
+// These are the canonical hex codes from Ringover's current design system.
+type TagColor string
+
+const (
+	ColorYellow TagColor = "FFD54F"
+	ColorOrange TagColor = "FFB74D"
+	ColorBrown  TagColor = "A1887F"
+	ColorRed    TagColor = "FF6B6B"
+	ColorPink   TagColor = "F06292"
+	ColorPurple TagColor = "BA68C8"
+	ColorBlue   TagColor = "64B5F6"
+	ColorGreen  TagColor = "81C784"
+	ColorGrey   TagColor = "E0E0E0"
+)
+
+var colorNames = map[string]TagColor{
+	"yellow": ColorYellow,
+	"orange": ColorOrange,
+	"brown":  ColorBrown,
+	"red":    ColorRed,
+	"pink":   ColorPink,
+	"purple": ColorPurple,
+	"blue":   ColorBlue,
+	"green":  ColorGreen,
+	"grey":   ColorGrey,
+}
+
 type Tag struct {
 	TagID        int       `json:"tag_id"`
 	Name         string    `json:"name"`
-	Color        string    `json:"color"`
+	Color        TagColor  `json:"color"`
 	Description  string    `json:"description"`
 	CreationDate time.Time `json:"creation_date"`
 }
