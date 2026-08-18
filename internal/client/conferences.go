@@ -26,7 +26,7 @@ import (
 	"github.com/matthieukhl/rgvr/internal/models"
 )
 
-func (c *Client) GetConferences() ([]models.ListResponse[models.Conference], *RequestInfo, error) {
+func (c *Client) GetConferences() (*models.ListResponse[models.Conference], *RequestInfo, error) {
 	path := "/conferences"
 
 	resp, reqInfo, err := c.Get(path)
@@ -48,7 +48,7 @@ func (c *Client) GetConferences() ([]models.ListResponse[models.Conference], *Re
 		return nil, reqInfo, fmt.Errorf("unexpected response from API: %w", err)
 	}
 
-	var conferences []models.ListResponse[models.Conference]
+	var conferences *models.ListResponse[models.Conference]
 
 	err = json.NewDecoder(resp.Body).Decode(&conferences)
 	if err != nil {
