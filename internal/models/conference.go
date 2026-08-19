@@ -16,21 +16,30 @@
 	    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package main
+package models
 
-import (
-	"github.com/matthieukhl/rgvr/cmd"
-	_ "github.com/matthieukhl/rgvr/cmd/auth"
-	_ "github.com/matthieukhl/rgvr/cmd/conferences"
-	_ "github.com/matthieukhl/rgvr/cmd/groups"
-	_ "github.com/matthieukhl/rgvr/cmd/ivrs"
-	_ "github.com/matthieukhl/rgvr/cmd/numbers"
-	_ "github.com/matthieukhl/rgvr/cmd/scenarios"
-	_ "github.com/matthieukhl/rgvr/cmd/tags"
-	_ "github.com/matthieukhl/rgvr/cmd/teams"
-	_ "github.com/matthieukhl/rgvr/cmd/users"
-)
+import "fmt"
 
-func main() {
-	cmd.Execute()
+type Conference struct {
+	ID      int    `json:"conference_id"`
+	Name    string `json:"name"`
+	Numbers []Number
+}
+
+func (c Conference) TableHeader() []string {
+	return []string{
+		"Conference ID",
+		"Name",
+		"Numbers",
+	}
+}
+
+func (c Conference) TableRow() []string {
+	numbers := listNumbers(c.Numbers)
+
+	return []string{
+		fmt.Sprintf("%d", c.ID),
+		c.Name,
+		numbers,
+	}
 }
