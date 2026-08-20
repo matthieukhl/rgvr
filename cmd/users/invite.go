@@ -85,6 +85,18 @@ Warning — Sensitive operation:
 			if err = json.Unmarshal(data, &userInvites); err != nil {
 				return fmt.Errorf("decoding data from file %s: %w", filename, err)
 			}
+		} else {
+			number, _ := cmd.Flags().GetInt("number")
+			email, _ := cmd.Flags().GetString("email")
+			planId, _ := cmd.Flags().GetInt("plan")
+
+			userInvite := models.UserInvite{
+				Number: number,
+				Email:  email,
+				PlanID: planId,
+			}
+
+			userInvites = append(userInvites, userInvite)
 		}
 
 		invitations := models.UserInvitationPayload{
@@ -111,5 +123,18 @@ Warning — Sensitive operation:
 
 func init() {
 	usersCmd.AddCommand(inviteCmd)
+
 	inviteCmd.Flags().String("file", "", "")
+
+	// Ad hoc flags
+	inviteCmd.Flags().Int("number", 0, "")
+	inviteCmd.Flags().String("email", "", "")
+	inviteCmd.Flags().Int("plan", 0, "")
+
+	// Flags constraints
+	inviteCmd.MarkFlagsMutuallyExclusive("file", "number")
+	inviteCmd.MarkFlagsMutuallyExclusive("file", "email")
+	inviteCmd.MarkFlagsMutuallyExclusive("file", "plan")
+	inviteCmd.MarkFlagsRequiredTogether("number", "email", "plan")
+
 }
