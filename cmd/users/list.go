@@ -84,5 +84,5 @@ The total number of users is indicated in the list_count field.`,
 }
 
 func init() {
-	UsersCmd.AddCommand(listCmd)
+	usersCmd.AddCommand(listCmd)
 }

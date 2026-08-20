@@ -35,7 +35,7 @@ var snoozeCmd = &cobra.Command{
 }
 
 func init() {
-	UsersCmd.AddCommand(snoozeCmd)
+	usersCmd.AddCommand(snoozeCmd)
 
 	// Here you will define your flags and configuration settings.
 

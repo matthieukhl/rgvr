@@ -94,7 +94,7 @@ Monitoring impact:
 }
 
 func init() {
-	UsersCmd.AddCommand(presencesCmd)
+	usersCmd.AddCommand(presencesCmd)
 
 	// Here you will define your flags and configuration settings.
 
