@@ -26,17 +26,10 @@ import (
 	"github.com/matthieukhl/rgvr/internal/models"
 )
 
-func (c *Client) InviteUser(invitedBy int, users []models.UserInvite) (*models.UserInvitationResponse, *RequestInfo, error) {
+func (c *Client) InviteUser(invitations *models.UserInvitationPayload) ([]models.UserInvitationResponse, *RequestInfo, error) {
 	path := "/users/invite"
 
-	// TODO: add a check on the invitedBy arg
-
-	payload := models.UserInvitationPayload{
-		InvitedBy: invitedBy,
-		Users:     users,
-	}
-
-	body, err := json.Marshal(payload)
+	body, err := json.Marshal(invitations)
 	if err != nil {
 		return nil, nil, fmt.Errorf("encoding request payload: %w", err)
 	}
@@ -59,11 +52,11 @@ func (c *Client) InviteUser(invitedBy int, users []models.UserInvite) (*models.U
 		return nil, reqInfo, fmt.Errorf("unexpected response from API: %s", resp.Status)
 	}
 
-	var result models.UserInvitationResponse
+	var result []models.UserInvitationResponse
 
 	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
 		return nil, reqInfo, fmt.Errorf("decoding response body: %w", err)
 	}
 
-	return &result, reqInfo, nil
+	return result, reqInfo, nil
 }

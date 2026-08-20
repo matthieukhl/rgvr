@@ -39,6 +39,7 @@ type User struct {
 	RingDuration int      `json:"ring_duration,omitempty"`
 	Order        int      `json:"order,omitempty"`
 	Numbers      []Number `json:"numbers,omitempty"`
+	Plan         Plan     `json:"plan"`
 }
 
 // UserInvite represents a single user entry in an invitation request payload.
