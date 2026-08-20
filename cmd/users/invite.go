@@ -19,10 +19,13 @@
 package users
 
 import (
+	"encoding/csv"
 	"encoding/json"
 	"fmt"
 	"io"
 	"os"
+	"path/filepath"
+	"strconv"
 
 	"github.com/matthieukhl/rgvr/internal/client"
 	"github.com/matthieukhl/rgvr/internal/flags"
@@ -76,14 +79,48 @@ Warning — Sensitive operation:
 				return fmt.Errorf("opening file: %w", err)
 			}
 
-			// Read file
-			data, err := io.ReadAll(file)
-			if err != nil {
-				return fmt.Errorf("reading file %s: %w", filename, err)
-			}
+			fileExtension := filepath.Ext(filename)
 
-			if err = json.Unmarshal(data, &userInvites); err != nil {
-				return fmt.Errorf("decoding data from file %s: %w", filename, err)
+			switch fileExtension {
+			case ".json":
+				// Read the file
+				data, err := io.ReadAll(file)
+				if err != nil {
+					return fmt.Errorf("reading file %s: %w", filename, err)
+				}
+				if err = json.Unmarshal(data, &userInvites); err != nil {
+					return fmt.Errorf("decoding data from file %s: %w", filename, err)
+				}
+			case ".csv":
+				reader := csv.NewReader(file)
+				records, err := reader.ReadAll()
+				if err != nil {
+					return fmt.Errorf("reading .csv file: %w", err)
+				}
+
+				for _, record := range records[1:] {
+					number, err := strconv.Atoi(record[0])
+					if err != nil {
+						return fmt.Errorf("invalid number format: %w", err)
+					}
+
+					email := record[1]
+
+					planId, err := strconv.Atoi(record[2])
+					if err != nil {
+						return fmt.Errorf("invalid plan ID format: %w", err)
+					}
+
+					userInvite := models.UserInvite{
+						Number: number,
+						Email:  email,
+						PlanID: planId,
+					}
+
+					userInvites = append(userInvites, userInvite)
+				}
+			default:
+				return fmt.Errorf("invalid file format. Supported file formats: csv/json")
 			}
 		} else {
 			number, _ := cmd.Flags().GetInt("number")
@@ -97,6 +134,10 @@ Warning — Sensitive operation:
 			}
 
 			userInvites = append(userInvites, userInvite)
+		}
+
+		if len(userInvites) == 0 {
+			return fmt.Errorf("no invitations to send")
 		}
 
 		invitations := models.UserInvitationPayload{
@@ -115,7 +156,9 @@ Warning — Sensitive operation:
 			return fmt.Errorf("checking verbose flag: %w", err)
 		}
 
-		fmt.Println(resp[0])
+		for i := range resp {
+			fmt.Println(resp[i])
+		}
 
 		return nil
 	},
@@ -138,3 +181,5 @@ func init() {
 	inviteCmd.MarkFlagsRequiredTogether("number", "email", "plan")
 
 }
+
+func buildUserInvitePayload() {}
