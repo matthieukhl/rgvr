@@ -12,6 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [Pull Request #39](https://github.com/matthieukhl/rgvr/pull/39): Added `conferences list` command.
 - [Pull Request #40](https://github.com/matthieukhl/rgvr/pull/40): Added `conferences get <conference_id>` command.
 
+### Fixed
+
+- [Pull Request #42](https://github.com/matthieukhl/rgvr/pull/42): Fixed `rgvr --version` that constantly returned `dev` as app version.
+
 ## [v0.6.0-beta] - 2026-08-18
 
 ### Added
