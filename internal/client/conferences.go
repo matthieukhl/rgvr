@@ -57,3 +57,37 @@ func (c *Client) GetConferences() (*models.ListResponse[models.Conference], *Req
 
 	return conferences, reqInfo, nil
 }
+
+func (c *Client) GetConference(conferenceID int) (*models.Conference, *RequestInfo, error) {
+	path := fmt.Sprintf("/conferences/%d", conferenceID)
+
+	resp, reqInfo, err := c.Get(path)
+	if err != nil {
+		return nil, reqInfo, fmt.Errorf("reading response bodyy: %w", err)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode == http.StatusBadRequest {
+		return nil, reqInfo, fmt.Errorf("%s: invalid conference identifier", resp.Status)
+	}
+
+	if resp.StatusCode == http.StatusUnauthorized {
+		return nil, reqInfo, fmt.Errorf("%s: invalid or missing API token, or Monitoring is OFF.", resp.Status)
+	}
+
+	if resp.StatusCode == http.StatusNotFound {
+		return nil, reqInfo, fmt.Errorf("%s: conference not found", resp.Status)
+	}
+
+	if resp.StatusCode != http.StatusOK {
+		return nil, reqInfo, fmt.Errorf("unexpected response from API: %w", err)
+	}
+
+	var conference *models.Conference
+
+	if err := json.NewDecoder(resp.Body).Decode(&conference); err != nil {
+		return nil, reqInfo, fmt.Errorf("decoding conferences information: %w", err)
+	}
+
+	return conference, reqInfo, nil
+}
