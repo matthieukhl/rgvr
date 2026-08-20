@@ -5,12 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [v0.7.0-beta] - 2026-08-20
 
 ### Added
 
 - [Pull Request #39](https://github.com/matthieukhl/rgvr/pull/39): Added `conferences list` command.
 - [Pull Request #40](https://github.com/matthieukhl/rgvr/pull/40): Added `conferences get <conference_id>` command.
+- [Pull Request #43](https://github.com/matthieukhl/rgvr/pull/43): Added `conferences set-pin <conference_id> <pincode>` command.
 
 ### Fixed
 
