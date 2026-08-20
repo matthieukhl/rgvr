@@ -91,3 +91,35 @@ func (c *Client) GetConference(conferenceID int) (*models.Conference, *RequestIn
 
 	return conference, reqInfo, nil
 }
+
+func (c *Client) SetConferencePin(conferenceID, pinCode int) (*RequestInfo, error) {
+	path := fmt.Sprintf("/conferences/%d/pincode/%d", conferenceID, pinCode)
+
+	resp, reqInfo, err := c.Patch(path, nil)
+	if err != nil {
+		return reqInfo, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode == http.StatusNotModified {
+		return reqInfo, nil
+	}
+
+	if resp.StatusCode == http.StatusBadRequest {
+		return reqInfo, fmt.Errorf("%s: invalid conference or pincode identifier", resp.Status)
+	}
+
+	if resp.StatusCode == http.StatusUnauthorized {
+		return reqInfo, fmt.Errorf("%s: invalid or missing API token, or Monitoring is OFF", resp.Status)
+	}
+
+	if resp.StatusCode == http.StatusNotFound {
+		return reqInfo, fmt.Errorf("%s: conference not found", resp.Status)
+	}
+
+	if resp.StatusCode != http.StatusOK {
+		return reqInfo, fmt.Errorf("unexpected reponse from API: %s", resp.Status)
+	}
+
+	return reqInfo, nil
+}
