@@ -91,7 +91,7 @@ See [Changelog](CHANGELOG.md).
 - 🟢 `/numbers` endpoint
 - 🟢 `/ivrs` endpoint
 - 🟢 `/tags` endpoint
-- 🔴 `/conferences` endpoint
+- 🟢 `/conferences` endpoint
 - 🔴 `/calls` endpoint
 - 🔴 `/campaigns` endpoint
 - 🔴 `/channels` endpoint
