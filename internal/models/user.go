@@ -41,6 +41,21 @@ type User struct {
 	Numbers      []Number `json:"numbers,omitempty"`
 }
 
+// UserInvite represents a single user entry in an invitation request payload.
+type UserInvite struct {
+	Number    int    `json:"number"`
+	Email     string `json:"email"`
+	Firstname string `json:"firstname"`
+	Lastname  string `json:"lastname"`
+	PlanID    int    `json:"plan_id"`
+}
+
+// UserInvitationPayload represents the request body for POST /users/invite.
+type UserInvitationPayload struct {
+	InvitedBy int          `json:"invited_by"` // ID of the user initiating the invitation
+	Users     []UserInvite `json:"users"`
+}
+
 // UserInvitationResponse represents the response received after inviting a user
 // to the Ringover system using POST /users/invite endpoint.
 type UserInvitationResponse struct {
