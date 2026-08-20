@@ -40,8 +40,8 @@ It allows you to manage your Ringover account directly from the command line.`,
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the RootCmd.
 func Execute() {
+	RootCmd.Version = appVersion
 	RootCmd.Execute()
-
 }
 
 func init() {
