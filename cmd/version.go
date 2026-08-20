@@ -18,6 +18,16 @@
 
 package cmd
 
+import "runtime/debug"
+
 var (
-	appVersion = "dev" // default value, will be overridden by ldflags during build
+	appVersion = "dev" // overridden by ldflags during `make build`; falls back to build info for `go install`
 )
+
+func init() {
+	if appVersion == "dev" {
+		if info, ok := debug.ReadBuildInfo(); ok && info.Main.Version != "" && info.Main.Version != "(devel)" {
+			appVersion = info.Main.Version
+		}
+	}
+}
