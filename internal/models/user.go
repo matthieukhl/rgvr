@@ -41,6 +41,29 @@ type User struct {
 	Numbers      []Number `json:"numbers,omitempty"`
 }
 
+// UserInvitationResponse represents the response received after inviting a user
+// to the Ringover system using POST /users/invite endpoint.
+type UserInvitationResponse struct {
+	ID                        int    `json:"id"`
+	Email                     string `json:"email"`
+	Firstname                 string `json:"firstname"`
+	Lastname                  string `json:"lastname"`
+	IsAdmin                   bool   `json:"is_admin"`
+	IsBilling                 bool   `json:"is_billing"`
+	IsSupervisorCurrentscalls bool   `json:"is_supervisor_currentscalls"`
+	IsSupervisorLogs          bool   `json:"is_supervisor_logs"`
+	IsSupervisorStats         bool   `json:"is_supervisor_stats"`
+	IsSupervisorCampaign      bool   `json:"is_supervisor_campaign"`
+	IsTechnical               bool   `json:"is_technical"`
+	PlanID                    int    `json:"plan_id"`
+	PlanName                  string `json:"plan_name"`
+	Superadmin                bool   `json:"superadmin"`
+	UserStatus                string `json:"user_status"`
+	Avatar                    string `json:"avatar"`
+	Admin                     string `json:"admin"`
+	Waiting                   bool   `json:"waiting"`
+}
+
 func (u User) TableHeader() []string {
 	return []string{
 		"UserID",
