@@ -1,0 +1,69 @@
+/*
+		rgvr - A CLI to interact with Ringover's public API.
+	    Copyright (C) 2026  Matthieu Khairallah <matthieu.khairallah@proton.me>
+
+	    This program is free software: you can redistribute it and/or modify
+	    it under the terms of the GNU Affero General Public License as published by
+	    the Free Software Foundation, either version 3 of the License, or
+	    (at your option) any later version.
+
+	    This program is distributed in the hope that it will be useful,
+	    but WITHOUT ANY WARRANTY; without even the implied warranty of
+	    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	    GNU Affero General Public License for more details.
+
+	    You should have received a copy of the GNU Affero General Public License
+	    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
+package client
+
+import (
+	"encoding/json"
+	"fmt"
+	"net/http"
+
+	"github.com/matthieukhl/rgvr/internal/models"
+)
+
+func (c *Client) InviteUser(invitedBy int, users []models.UserInvite) (*models.UserInvitationResponse, *RequestInfo, error) {
+	path := "/users/invite"
+
+	// TODO: add a check on the invitedBy arg
+
+	payload := models.UserInvitationPayload{
+		InvitedBy: invitedBy,
+		Users:     users,
+	}
+
+	body, err := json.Marshal(payload)
+	if err != nil {
+		return nil, nil, fmt.Errorf("encoding request payload: %w", err)
+	}
+
+	resp, reqInfo, err := c.Post(path, body)
+	if err != nil {
+		return nil, reqInfo, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode == http.StatusBadRequest {
+		return nil, reqInfo, fmt.Errorf("%s: the request body is malformed or missing required fields", resp.Status)
+	}
+
+	if resp.StatusCode == http.StatusUnauthorized {
+		return nil, reqInfo, fmt.Errorf("%s: missing, invalid or expired API key", resp.Status)
+	}
+
+	if resp.StatusCode != http.StatusOK {
+		return nil, reqInfo, fmt.Errorf("unexpected response from API: %s", resp.Status)
+	}
+
+	var result models.UserInvitationResponse
+
+	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
+		return nil, reqInfo, fmt.Errorf("decoding response body: %w", err)
+	}
+
+	return &result, reqInfo, nil
+}
