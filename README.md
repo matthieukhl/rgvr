@@ -1,5 +1,11 @@
 # rgvr
 
+[![License: MIT](https://shields.io)](https://opensource.org)
+[![Go Version](https://shields.io)](https://github.com)
+[![Go Report Card](https://goreportcard.com)](https://goreportcard.com)
+[![GitHub release](https://shields.io)](https://github.com)
+
+
 `rgvr` is a command-line tool written in Go for interacting with [Ringover](https://www.ringover.com)'s public API — manage and query your teams, users, calls, and more, directly from your terminal.
 
 > **Disclaimer**: rgvr is an independent, community-built tool. It is not affiliated with, endorsed by, or supported by Ringover.  
@@ -117,4 +123,4 @@ See [Changelog](CHANGELOG.md).
 
 ## License
 
-rgvr is licensed under **AGPL-3.0-only**. See [LICENSE](LICENSE) for the full license text.
+rgvr is licensed under the **MIT License**. See the [LICENSE](LICENSE) file for the full license text.
