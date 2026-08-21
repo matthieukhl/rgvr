@@ -83,57 +83,19 @@ Warning — Sensitive operation:
 
 			switch fileExtension {
 			case ".json":
-				// Read the file
-				data, err := io.ReadAll(file)
-				if err != nil {
-					return fmt.Errorf("reading file %s: %w", filename, err)
-				}
-				if err = json.Unmarshal(data, &userInvites); err != nil {
-					return fmt.Errorf("decoding data from file %s: %w", filename, err)
+				if userInvites, err = buildUserInvitePayloadFromJSON(file, userInvites); err != nil {
+					return err
 				}
 			case ".csv":
-				reader := csv.NewReader(file)
-				records, err := reader.ReadAll()
+				userInvites, err = buildUserInvitePayloadFromCSV(file)
 				if err != nil {
-					return fmt.Errorf("reading .csv file: %w", err)
-				}
-
-				for _, record := range records[1:] {
-					number, err := strconv.Atoi(record[0])
-					if err != nil {
-						return fmt.Errorf("invalid number format: %w", err)
-					}
-
-					email := record[1]
-
-					planId, err := strconv.Atoi(record[2])
-					if err != nil {
-						return fmt.Errorf("invalid plan ID format: %w", err)
-					}
-
-					userInvite := models.UserInvite{
-						Number: number,
-						Email:  email,
-						PlanID: planId,
-					}
-
-					userInvites = append(userInvites, userInvite)
+					return err
 				}
 			default:
 				return fmt.Errorf("invalid file format. Supported file formats: csv/json")
 			}
 		} else {
-			number, _ := cmd.Flags().GetInt("number")
-			email, _ := cmd.Flags().GetString("email")
-			planId, _ := cmd.Flags().GetInt("plan")
-
-			userInvite := models.UserInvite{
-				Number: number,
-				Email:  email,
-				PlanID: planId,
-			}
-
-			userInvites = append(userInvites, userInvite)
+			userInvites = buildUserInvitePayloadFromFlags(cmd)
 		}
 
 		if len(userInvites) == 0 {
@@ -156,8 +118,8 @@ Warning — Sensitive operation:
 			return fmt.Errorf("checking verbose flag: %w", err)
 		}
 
-		for i := range resp {
-			fmt.Println(resp[i])
+		for _, user := range resp {
+			fmt.Printf("Invitation sent to: %s (User ID: %d)\n", user.Email, user.ID)
 		}
 
 		return nil
@@ -182,4 +144,68 @@ func init() {
 
 }
 
-func buildUserInvitePayload() {}
+func buildUserInvitePayloadFromJSON(file *os.File, userInvites []models.UserInvite) ([]models.UserInvite, error) {
+	// Read the file
+	data, err := io.ReadAll(file)
+	if err != nil {
+		return nil, fmt.Errorf("reading file %s: %w", file.Name(), err)
+	}
+
+	if err = json.Unmarshal(data, &userInvites); err != nil {
+		return nil, fmt.Errorf("decoding data from file %s: %w", file.Name(), err)
+	}
+
+	return userInvites, nil
+}
+
+func buildUserInvitePayloadFromCSV(file *os.File) ([]models.UserInvite, error) {
+	reader := csv.NewReader(file)
+	records, err := reader.ReadAll()
+	if err != nil {
+		return nil, fmt.Errorf("reading .csv file: %w", err)
+	}
+
+	var userInvites []models.UserInvite
+
+	for _, record := range records[1:] {
+		number, err := strconv.Atoi(record[0])
+		if err != nil {
+			return nil, fmt.Errorf("invalid number format: %w", err)
+		}
+
+		email := record[1]
+
+		planId, err := strconv.Atoi(record[2])
+		if err != nil {
+			return nil, fmt.Errorf("invalid plan ID format: %w", err)
+		}
+
+		userInvite := models.UserInvite{
+			Number: number,
+			Email:  email,
+			PlanID: planId,
+		}
+
+		userInvites = append(userInvites, userInvite)
+	}
+
+	return userInvites, nil
+}
+
+func buildUserInvitePayloadFromFlags(cmd *cobra.Command) []models.UserInvite {
+	number, _ := cmd.Flags().GetInt("number")
+	email, _ := cmd.Flags().GetString("email")
+	planId, _ := cmd.Flags().GetInt("plan")
+
+	userInvite := models.UserInvite{
+		Number: number,
+		Email:  email,
+		PlanID: planId,
+	}
+
+	var userInvites []models.UserInvite
+
+	userInvites = append(userInvites, userInvite)
+
+	return userInvites
+}
