@@ -36,7 +36,7 @@ import (
 
 // inviteCmd represents the invite command
 var inviteCmd = &cobra.Command{
-	Use:   "invite",
+	Use:   "invite [flags]",
 	Short: "Invites one or more users to the team and creates all associated resources.",
 	Long: `
 Invites one or more users to the team and creates all associated resources (user accounts, phone numbers, voicemail, etc.).
@@ -58,6 +58,16 @@ Warning — Sensitive operation:
 	and generating activation emails.
 	Consider restricting API key distribution to prevent unauthorized user creation.
 `,
+	Args: cobra.NoArgs,
+	Example: `
+# Invite a single user using flags
+rgvr users invite --number 1234567890 --email
+
+# Invite multiple users using a CSV file
+rgvr users invite --file filename.csv
+
+# Invite multiple users using a JSON file
+rgvr users invite --file filename.json`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		// Fetch user ID from config to populate UserInvitationPayload.InvitedBy field
 		userID := viper.GetInt("user_id")
