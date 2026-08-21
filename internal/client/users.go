@@ -62,9 +62,19 @@ func (c *Client) InviteUser(invitations *models.UserInvitationPayload) ([]models
 }
 
 func (c *Client) DeleteUser(userID int, deletionType string) (*RequestInfo, error) {
+
+	// rgvr users delete passes delete as the deletionType, which is the name of the command.
+	// For user deletion, the API expects the deletionType to be "DELETED".
 	if deletionType == "delete" {
 		deletionType = "DELETED"
 	}
+
+	// rgvr users archive passes archive as the deletionType, which is the name of the command.
+	// For user archiving, the API expects the deletionType to be "ARCHIVED".
+	if deletionType == "archive" {
+		deletionType = "ARCHIVED"
+	}
+
 	path := fmt.Sprintf("/users/%d?type=%s", userID, deletionType)
 
 	resp, reqInfo, err := c.Delete(path, nil)
