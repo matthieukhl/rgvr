@@ -23,7 +23,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/matthieukhl/rgvr/internal"
+	"github.com/matthieukhl/rgvr/internal/config"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -56,7 +56,7 @@ func initConfig() {
 	viper.SetConfigName("config")
 	viper.SetConfigType("yaml")
 
-	configDir, err := internal.GetConfigDir()
+	configDir, err := config.GetConfigDir()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error getting config directory: %v\n", err)
 		os.Exit(1)

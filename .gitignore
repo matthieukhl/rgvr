@@ -32,3 +32,6 @@ go.work.sum
 .idea/
 .vscode/
 .cursor/
+
+# Directory of dummy files for testing purposes
+dummy_files/

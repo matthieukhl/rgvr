@@ -16,20 +16,10 @@
 	    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package internal
+package models
 
-import (
-	"fmt"
-	"os"
-	"path/filepath"
-)
-
-// GetConfigDir returns the path to the configuration directory for rgvr.
-func GetConfigDir() (string, error) {
-	home, err := os.UserHomeDir()
-	if err != nil {
-		return "", fmt.Errorf("resolving home directory: %w", err)
-	}
-	configDir := filepath.Join(home, ".config", "rgvr")
-	return configDir, nil
+type Plan struct {
+	ID   int    `json:"id"`
+	Name string `json:"name"`
+	Type string `json:"type"`
 }

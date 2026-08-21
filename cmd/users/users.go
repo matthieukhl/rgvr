@@ -28,7 +28,7 @@ import (
 )
 
 // UsersCmd represents the users command
-var UsersCmd = &cobra.Command{
+var usersCmd = &cobra.Command{
 	Use:   "users",
 	Short: "Manage your Ringover team members",
 	Long: `Manage your Ringover team members.
@@ -57,6 +57,6 @@ Monitoring impact:
 }
 
 func init() {
-	cmd.RootCmd.AddCommand(UsersCmd)
-	UsersCmd.PersistentFlags().String("format", "json", "Choose the output's format: table / json")
+	cmd.RootCmd.AddCommand(usersCmd)
+	usersCmd.PersistentFlags().String("format", "json", "Choose the output's format: table / json")
 }

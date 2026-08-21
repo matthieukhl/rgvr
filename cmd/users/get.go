@@ -93,5 +93,5 @@ Monitoring impact:
 }
 
 func init() {
-	UsersCmd.AddCommand(getCmd)
+	usersCmd.AddCommand(getCmd)
 }

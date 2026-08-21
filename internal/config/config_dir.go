@@ -16,38 +16,20 @@
 	    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package auth
+package config
 
 import (
 	"fmt"
-
-	"github.com/matthieukhl/rgvr/internal/config"
-	"github.com/spf13/cobra"
+	"os"
+	"path/filepath"
 )
 
-// loginCmd represents the login command
-var loginCmd = &cobra.Command{
-	Use:   "login",
-	Short: "Save your Ringover API key locally",
-	Long: `Prompts for your Ringover API key and stores it in
-~/.config/rgvr/config.yaml so you don't need to pass it on every command.`,
-	RunE: func(cmd *cobra.Command, args []string) error {
-
-		cfg, err := config.NewConfig()
-		if err != nil {
-			return err
-		}
-
-		configPath, err := cfg.Write()
-		if err != nil {
-			return err
-		}
-
-		fmt.Printf("API key saved to %s\n", configPath)
-		return nil
-	},
-}
-
-func init() {
-	AuthCmd.AddCommand(loginCmd)
+// GetConfigDir returns the path to the configuration directory for rgvr.
+func GetConfigDir() (string, error) {
+	home, err := os.UserHomeDir()
+	if err != nil {
+		return "", fmt.Errorf("resolving home directory: %w", err)
+	}
+	configDir := filepath.Join(home, ".config", "rgvr")
+	return configDir, nil
 }

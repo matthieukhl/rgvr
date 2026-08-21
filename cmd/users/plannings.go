@@ -30,5 +30,5 @@ var planningsCmd = &cobra.Command{
 }
 
 func init() {
-	UsersCmd.AddCommand(planningsCmd)
+	usersCmd.AddCommand(planningsCmd)
 }
