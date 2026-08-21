@@ -1,5 +1,10 @@
 # rgvr
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Go Version](https://img.shields.io/github/go-mod/go-version/matthieukhl/rgvr)](https://github.com/matthieukhl/rgvr)
+[![GitHub release](https://img.shields.io/github/v/release/matthieukhl/rgvr?include_prereleases)](https://github.com/matthieukhl/rgvr/releases)
+
+
 `rgvr` is a command-line tool written in Go for interacting with [Ringover](https://www.ringover.com)'s public API — manage and query your teams, users, calls, and more, directly from your terminal.
 
 > **Disclaimer**: rgvr is an independent, community-built tool. It is not affiliated with, endorsed by, or supported by Ringover.  
@@ -7,7 +12,7 @@
 
 ## Prerequisites
 
-- Go 1.21+ (for building from source)
+- Go 1.26+ (for building from source)
 - A valid Ringover API key (create one from your Ringover Dashboard under **Developer > API key**)
 
 ### API key permissions
@@ -48,7 +53,7 @@ Authenticate with your Ringover API key:
 rgvr auth login
 ```
 
-This will prompt for your API key and your Ringover region (EU or US), and store them locally in `~/.config/rgvr/config.yaml`.
+This will prompt for your Ringover API key, you Ringover user ID and your Ringover region (EU or US), and store them locally in `~/.config/rgvr/config.yaml`.
 
 Verify you're properly authenticated:
 
@@ -117,4 +122,4 @@ See [Changelog](CHANGELOG.md).
 
 ## License
 
-rgvr is licensed under **AGPL-3.0-only**. See [LICENSE](LICENSE) for the full license text.
+rgvr is licensed under the **MIT License**. See the [LICENSE](LICENSE) file for the full license text.
