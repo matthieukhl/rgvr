@@ -60,3 +60,31 @@ func (c *Client) InviteUser(invitations *models.UserInvitationPayload) ([]models
 
 	return result, reqInfo, nil
 }
+
+func (c *Client) DeleteUser(userID int, deletionType string) (*RequestInfo, error) {
+	path := fmt.Sprintf("/users/%d?type=%s", userID, deletionType)
+
+	resp, reqInfo, err := c.Delete(path, nil)
+	if err != nil {
+		return reqInfo, fmt.Errorf("deleting user: %w", err)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode == http.StatusBadRequest {
+		return reqInfo, fmt.Errorf("%s: the provided user ID is invalid: %d", resp.Status, userID)
+	}
+
+	if resp.StatusCode == http.StatusUnauthorized {
+		return reqInfo, fmt.Errorf("%s: missing, invalid or expired API key", resp.Status)
+	}
+
+	if resp.StatusCode == http.StatusNotFound {
+		return reqInfo, fmt.Errorf("%s: no user found with the specified ID: %d", resp.Status, userID)
+	}
+
+	if resp.StatusCode != http.StatusOK {
+		return reqInfo, fmt.Errorf("unexpected response from API: %s", resp.Status)
+	}
+
+	return reqInfo, nil
+}
