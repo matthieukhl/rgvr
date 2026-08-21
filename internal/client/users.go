@@ -62,6 +62,9 @@ func (c *Client) InviteUser(invitations *models.UserInvitationPayload) ([]models
 }
 
 func (c *Client) DeleteUser(userID int, deletionType string) (*RequestInfo, error) {
+	if deletionType == "delete" {
+		deletionType = "DELETED"
+	}
 	path := fmt.Sprintf("/users/%d?type=%s", userID, deletionType)
 
 	resp, reqInfo, err := c.Delete(path, nil)
@@ -82,7 +85,9 @@ func (c *Client) DeleteUser(userID int, deletionType string) (*RequestInfo, erro
 		return reqInfo, fmt.Errorf("%s: no user found with the specified ID: %d", resp.Status, userID)
 	}
 
-	if resp.StatusCode != http.StatusOK {
+	// As of 2026-08-21, the API returns 204 No Content for successful deletion,
+	// even though the documentation states it should return 200 OK. This is a known issue.
+	if resp.StatusCode != http.StatusNoContent {
 		return reqInfo, fmt.Errorf("unexpected response from API: %s", resp.Status)
 	}
 
